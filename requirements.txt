@@ -15,6 +15,5 @@ scipy==1.5.2
 SoundFile==0.10.3.post1
 threadpoolctl==2.1.0
 jiwer==3.0.3
-kenlm==0.2.0
 evaluate
 
