@@ -4,7 +4,7 @@ LABEL authors="mekk-knights"
 ARG INCUBATOR_VER=unknown
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y git
+    apt-get install -y git && \
 
 RUN git clone https://github.com/chau25102001/SOICT_hackathon_2023_SLU_Mekk_Knights.git
 WORKDIR SOICT_hackathon_2023_SLU_Mekk_Knights

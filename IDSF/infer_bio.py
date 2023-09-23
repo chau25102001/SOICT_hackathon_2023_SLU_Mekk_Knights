@@ -3,10 +3,9 @@ import torch
 import tqdm
 
 from models.phobert_jointidsf import *
-from transformers import PhobertTokenizerFast, AutoTokenizer
+from transformers import AutoTokenizer
 from utils.utils import ner
 from configs.bio_config import get_config
-from segmentor.vws import RDRSegmenter, Tokenizer
 from datasets import load_dataset
 import json
 from data.constants import text_num_mapping
@@ -22,8 +21,6 @@ if __name__ == "__main__":
     warnings.filterwarnings('ignore')
     config = get_config(False)
     tokenizer = AutoTokenizer.from_pretrained(config.model_card)
-    rdrsegment = RDRSegmenter.RDRSegmenter()
-    segmenter = Tokenizer.Tokenizer()
     model = PhobertBIO(config.model_card, config.num_intent_classes,
                        config.num_slot_classes, use_etf=config.use_etf, use_attn=config.use_attn,
                        drop_out=config.drop_out,

@@ -4,6 +4,7 @@ torchaudio==0.12.1
 denoiser==0.1.5
 termcolor
 datasets
+datasets[audio]
 numpy
 easydict
 wandb

@@ -4,12 +4,9 @@ import sys
 import random
 
 sys.path.append("..")
-from segmentor.vws import RDRSegmenter, Tokenizer
 from augment_data_bio import *
 import datasets
 
-rdrsegment = RDRSegmenter.RDRSegmenter()
-tokenizer = Tokenizer.Tokenizer()
 
 random.seed(42)
 intent_mapping = {'bật thiết bị': 0,
