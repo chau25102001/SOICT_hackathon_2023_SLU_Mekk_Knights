@@ -1,0 +1,7 @@
+torch~=2.0.1
+termcolor~=2.3.0
+datasets~=2.13.0
+numpy~=1.25.2
+easydict~=1.10
+wandb~=0.15.10
+tqdm~=4.65.0
