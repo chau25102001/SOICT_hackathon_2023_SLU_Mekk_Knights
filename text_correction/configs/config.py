@@ -62,9 +62,9 @@ def get_config(train=True):
     # C.model_card = "VietAI/vit5-base"
 
     '''TRAINER CONFIG'''
-    C.train_batch_size = 64
+    C.train_batch_size = 32
     C.val_batch_size = 32
-    C.total_batch_size = 64
+    C.total_batch_size = 32
     C.epochs = 5
     C.lr = 5e-5
     C.weight_decay = 1e-2
