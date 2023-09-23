@@ -6,7 +6,6 @@ from torch.nn.utils import clip_grad_norm_
 import torch.nn as nn
 import torch.utils.data as data
 from tqdm import tqdm
-import wandb
 from utils.utils import *
 
 
@@ -15,11 +14,7 @@ class BartPhoCorrectionTrainer(BaseTrainer):
         super().__init__(config)
         self.current_step = 0
         self.criterion = nn.CrossEntropyLoss()
-        wandb.init(project="BartPho for text correction",
-                   entity='chaunm',
-                   resume=False,
-                   config=config,
-                   name=self.config.name)
+
 
     def get_train_loader(self, config) -> data.DataLoader:
         tokenizer = AutoTokenizer.from_pretrained(config.model_card, use_fast=True)
@@ -94,8 +89,6 @@ class BartPhoCorrectionTrainer(BaseTrainer):
             "train/loss": train_loss_meter.average(),
             "train/acc": train_acc_meter.average()
         }
-        for k, v in result.items():
-            wandb.log({k: v})
 
     def _val_epoch(self, epoch) -> dict:
         self.model.eval()
@@ -128,6 +121,4 @@ class BartPhoCorrectionTrainer(BaseTrainer):
             "val/loss": val_loss_meter.average(),
             "val/acc": val_acc_meter.average()
         }
-        for k, v in result.items():
-            wandb.log({k: v})
         return {"metric": result['val/acc']}

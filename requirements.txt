@@ -2,9 +2,8 @@ denoiser==0.1.5
 termcolor
 datasets
 datasets[audio]
-numpy
+numpy==1.23.5
 easydict
-wandb
 tqdm
 pytorch-crf
 numba
@@ -16,4 +15,4 @@ SoundFile==0.10.3.post1
 threadpoolctl==2.1.0
 jiwer==3.0.3
 evaluate
-
+matplotlib

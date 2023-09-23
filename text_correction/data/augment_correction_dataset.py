@@ -1,10 +1,9 @@
-
 import typing
 import re
 from datasets import load_dataset
-from data.constants import *
+from constants import *
 
-dataset = load_dataset('json', data_files='train.jsonl', split='train')
+dataset = load_dataset('json', data_files='train_final_20230919.jsonl', split='train')
 van_file = open("van", 'r')
 lines = van_file.readlines()
 list_van = []
@@ -1261,7 +1260,7 @@ def generate_corrupted_dataset(sample, num_augment=2):
                 sentence = num_convert(sentence)  # normalize text
             except:
                 print(sentence)
-                exit()
+                continue
             sentence_words = sentence.split(" ")
             word_indices = [idx for idx in range(len(sentence_words)) if sentence_words[idx].isalpha()]
             num_augment = random.uniform(0.15, 0.3)
@@ -1285,23 +1284,12 @@ def generate_clean_dataset(sample, num_augment=1):
     for time in range(num_augment):
         for i, _ in enumerate(sample['sentence']):
             sentence = sample['sentence'][i]
-            sentence = num_convert(sentence)
+            try:
+                sentence = num_convert(sentence)
+            except:
+                print(sentence)
+                continue
             new_sample['sentence_source'].append(sentence)
             new_sample['sentence_target'].append(sentence)
             new_sample['file'].append(sample['file'][i])
     return new_sample
-
-# if __name__ == "__main__":
-# from functools import partial
-#
-# dataset = load_dataset('json', data_files='train.jsonl', split='train')
-# dataset = dataset.map(refine_dataset, batched=True)
-# corrupted_dataset = dataset.map(partial(generate_corrupted_dataset, num_augment=5), batched=True,
-#                                 remove_columns=dataset.column_names,
-#                                 load_from_cache_file=False
-#                                 )
-# corrupted_dataset = corrupted_dataset.shuffle()
-# for i in range(10):
-#     print(corrupted_dataset[i])
-# print(len(corrupted_dataset))
-# print(extract_van_and_accent_from_word('camera'))

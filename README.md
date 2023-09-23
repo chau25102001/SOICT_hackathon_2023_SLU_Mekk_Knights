@@ -12,7 +12,7 @@ Run the following bash files in respective order to prepare for training:
 - ```bash ./speech_modules/scripts/train.sh```: Train a wav2vec2 model using the original training data, augmented data, and denoised data. The best checkpoint will be saved at "speech_modules/checkpoint/wav2vec2-ckpt"
 
 ### Inference Procedure
-- ```bash ./speech_modules/scripts/download_ckpt.sh```: Download our trained checkpoint and unzip it at *speech_modules/checkpoint/wav2vec2-2109*.
+- ```bash ./speech_modules/scripts/prepare_ckpt.sh```: Download our trained checkpoint and unzip it at *speech_modules/checkpoint/wav2vec2-2109*.
 - ```bash ./speech_modules/scripts/infer.sh```: Generating transcripts of the public test sets using the saved best checkpoint (at *speech_modules/checkpoint/wav2vec2-2109*)
 
 

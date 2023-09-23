@@ -9,7 +9,6 @@ from transformers import PhobertTokenizerFast, AutoTokenizer
 from torch.nn.utils import clip_grad_norm_
 import torch.utils.data as data
 import os
-import wandb
 import termcolor
 
 
@@ -17,11 +16,7 @@ class PhobertBIOTrainer(BaseTrainer):
     def __init__(self, config):
         super().__init__(config)
         self.current_step = 0
-        wandb.init(project="PhoBert for slot filling BIO",
-                   entity='chaunm',
-                   resume=False,
-                   config=config,
-                   name=self.config.name)
+
 
     def get_train_loader(self, config) -> data.DataLoader:
         tokenizer = AutoTokenizer.from_pretrained(config.model_card, use_fast=True)
@@ -117,8 +112,6 @@ class PhobertBIOTrainer(BaseTrainer):
             "train/intent_acc": train_acc_intent_meter.average(),
             "train/slot_acc": train_acc_slot_meter.average()
         }
-        for k, v in result.items():
-            wandb.log({k: v})
 
     def _val_epoch(self, epoch) -> dict:
         self.model.eval()
@@ -159,6 +152,4 @@ class PhobertBIOTrainer(BaseTrainer):
             "val/intent_acc": val_acc_intent_meter.average(),
             "val/slot_acc": val_acc_slot_meter.average()
         }
-        for k, v in result.items():
-            wandb.log({k: v})
         return {"metric": (result['val/intent_acc'] + result['val/slot_acc']) / 2}

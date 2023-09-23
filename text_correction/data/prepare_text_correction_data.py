@@ -1,7 +1,7 @@
 import os.path
 
 import datasets
-from data.augment_correction_dataset import *
+from augment_correction_dataset import *
 import pathlib
 from functools import partial
 import random
