@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=1 python speech_modules/wav2vec2/infer.py --checkpoint_path "speech_modules/checkpoint/wav2vec2-2109" --output_path "asr_infer.jsonl"
