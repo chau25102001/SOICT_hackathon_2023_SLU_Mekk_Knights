@@ -1,3 +1,5 @@
+import os.path
+
 import termcolor
 import torch
 import tqdm
@@ -10,11 +12,20 @@ from datasets import load_dataset
 import json
 from data.constants import text_num_mapping
 import re
+from argparse import ArgumentParser
 
+parser = ArgumentParser(description='testing')
+parser.add_argument("--stt_pred_path", type=str, default='/SOICT_hackathon_2023_SLU_Mekk_Knights/stt_pred.jsonl',
+                    help="path to the jsonl stt prediction")
+parser.add_argument("--model_checkpoint", type=str, default='checkpoint/checkpoint_best.pt')
+args = parser.parse_args()
 if __name__ == "__main__":
     import warnings
-
-    test_dataset = load_dataset("json", data_files="/home/chaunm/workspace/bartpho/correction.jsonl",
+    data_path = args.stt_pred_path
+    if data_path is None or not os.path.exists(data_path):
+        print(termcolor.colored(f"ERROR: cannot find stt prediction: {data_path}"))
+        exit()
+    test_dataset = load_dataset("json", data_files=data_path,
                                 split='train')
     # test_dataset = load_dataset("json", data_files="data/wav2vec_2109_lasthope.jsonl", split='train')
 
@@ -26,7 +37,7 @@ if __name__ == "__main__":
                        drop_out=config.drop_out,
                        attention_embedding_size=config.attention_embedding_size, use_crf=config.use_crf,
                        tag_mapping=config.slot_mapping)
-    checkpoint = torch.load("/media/HDD1/chaunm/phobert_bio/phobert_32/checkpoint_6.pt", map_location='cpu')
+    checkpoint = torch.load(args.model_checkpoint, map_location='cpu')
     # checkpoint = torch.load("/media/HDD1/chaunm/phobert_bio/phobert_35/checkpoint_best.pt", map_location='cpu')
 
     if isinstance(checkpoint, dict) and 'state_dict' in checkpoint.keys():
