@@ -31,6 +31,7 @@ if __name__ == "__main__":
 
     warnings.filterwarnings('ignore')
     config = get_config(False)
+    config.device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     tokenizer = AutoTokenizer.from_pretrained(config.model_card)
     model = PhobertBIO(config.model_card, config.num_intent_classes,
                        config.num_slot_classes, use_etf=config.use_etf, use_attn=config.use_attn,

@@ -48,7 +48,7 @@ class PhobertBIO(nn.Module):
         self.tag_mapping = tag_mapping
         if self.use_crf:
             self.crf = CRF(num_tags=num_slot_classes, batch_first=True)
-            # self._init_crf()
+            self._init_crf()
 
     def _init_crf(self, imp_value=-1e5):
         for k in self.tag_mapping:
