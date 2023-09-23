@@ -1,0 +1,35 @@
+{
+    "aug_data":{
+        "aug_options": ["noise", "external_noise"], 
+        "noises_filepath":"noises_list.txt",
+        "noise_range_min":0.01,
+        "noise_range_max":0.02,
+        "pitch_range_min":-4,
+        "pitch_range_max":4,
+        "stretch_range_min":0.95,
+        "stretch_range_max":1.05,
+        "external_noise_range_min":0.3,
+        "external_noise_range_max":0.5,
+        "shift_roll_range_min": 0.08,
+        "shift_roll_range_max": 0.1,
+        "num_freq_mask": 60,
+        "freq_masking_min_percentage": 0.005,
+        "freq_masking_max_percentage": 0.01,
+        "num_time_mask": 25,
+        "time_masking_min_percentage":0.005,
+        "time_masking_max_percentage":0.01
+    },
+    "audio": {
+        "segment_length": 16000,
+        "sample_rate": 16000,
+        "filter_length": 1024,
+        "num_freq": 513,
+        "n_mel_channels":80,
+        "hop_length": 256,
+        "win_length": 1024,
+        "mel_fmin": 0.0,
+        "mel_fmax": 8000.0,
+        "power": 1.5,           
+        "griffin_lim_iters": 60
+    }
+}
