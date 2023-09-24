@@ -15,7 +15,7 @@ Run the following bash files in respective order to prepare for training:
 
 ### Inference Procedure
 - ```bash ./speech_modules/scripts/prepare_ckpt.sh```: Download our trained checkpoint and unzip it at *speech_modules/checkpoint/wav2vec2-2109*.
-- ```bash ./speech_modules/scripts/infer.sh```: Generating transcripts of the public test sets using the saved best checkpoint (at *speech_modules/checkpoint/wav2vec2-2109*). This will save the inference results in a file named ```/SOICT_hackathon_2023_SLU_Mekk_Knights/speech_modules/stt_pred.jsonl```
+- ```bash ./speech_modules/scripts/infer.sh```: Generating transcripts of the public test sets using the saved best checkpoint (at *speech_modules/checkpoint/wav2vec2-2109*). This will save the inference results in a file named ```/SOICT_hackathon_2023_SLU_Mekk_Knights/stt_pred.jsonl```
 
 
 ## Phase 1.5 - Text correction model

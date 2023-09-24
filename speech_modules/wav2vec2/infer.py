@@ -22,7 +22,7 @@ import argparse
 import os
 from transformers.trainer_callback import TrainerState
 
-if __name__ == '_main_':
+if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--pretrained_tokenizer', type=str, help="Tokenizer of used pretrained model",

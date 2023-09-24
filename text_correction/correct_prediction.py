@@ -9,7 +9,7 @@ import termcolor
 from argparse import ArgumentParser
 
 parser = ArgumentParser(description='testing')
-parser.add_argument("--stt_pred_path", type=str, default='/SOICT_hackathon_2023_SLU_Mekk_Knights/speech_modules/stt_pred.jsonl',
+parser.add_argument("--stt_pred_path", type=str, default='/SOICT_hackathon_2023_SLU_Mekk_Knights/stt_pred.jsonl',
                     help="path to the jsonl stt prediction")
 parser.add_argument("--model_checkpoint", type=str, default='checkpoint/checkpoint_best.pt')
 args = parser.parse_args()
