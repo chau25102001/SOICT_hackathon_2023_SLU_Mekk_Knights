@@ -1259,7 +1259,6 @@ def generate_corrupted_dataset(sample, num_augment=2):
             try:
                 sentence = num_convert(sentence)  # normalize text
             except:
-                print(sentence)
                 continue
             sentence_words = sentence.split(" ")
             word_indices = [idx for idx in range(len(sentence_words)) if sentence_words[idx].isalpha()]

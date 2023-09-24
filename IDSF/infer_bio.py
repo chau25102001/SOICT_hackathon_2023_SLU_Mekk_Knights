@@ -15,7 +15,7 @@ import re
 from argparse import ArgumentParser
 
 parser = ArgumentParser(description='testing')
-parser.add_argument("--stt_pred_path", type=str, default='/SOICT_hackathon_2023_SLU_Mekk_Knights/stt_pred.jsonl',
+parser.add_argument("--stt_pred_path", type=str, default='/SOICT_hackathon_2023_SLU_Mekk_Knights/speech_modules/stt_pred.jsonl',
                     help="path to the jsonl stt prediction")
 parser.add_argument("--model_checkpoint", type=str, default='checkpoint/checkpoint_best.pt')
 args = parser.parse_args()
@@ -39,7 +39,6 @@ if __name__ == "__main__":
                        attention_embedding_size=config.attention_embedding_size, use_crf=config.use_crf,
                        tag_mapping=config.slot_mapping)
     checkpoint = torch.load(args.model_checkpoint, map_location='cpu')
-    # checkpoint = torch.load("/media/HDD1/chaunm/phobert_bio/phobert_35/checkpoint_best.pt", map_location='cpu')
 
     if isinstance(checkpoint, dict) and 'state_dict' in checkpoint.keys():
         checkpoint = checkpoint['state_dict']
@@ -105,7 +104,6 @@ if __name__ == "__main__":
             if original_context is not None:
                 o_ner_results = ner(original_context, tokenizer=tokenizer, model=model, device=config.device)
                 if 'B_scene' in o_ner_results['slot']:
-                    print("here", original_context)
                     intent = o_ner_results['intent'][0]
                     slots = o_ner_results['slot']
                     context = o_ner_results['context']
@@ -165,7 +163,6 @@ if __name__ == "__main__":
                     i = i + count
                 i += 1
             if cond1 and cond2 and intent in correct_intent:
-                # print(intent)
                 intent = correct_intent[intent]
             if cond3 and intent in correct_intent:
                 intent = correct_intent_temp[intent]

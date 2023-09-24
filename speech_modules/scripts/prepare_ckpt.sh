@@ -1,6 +1,6 @@
 echo "-------------- Downloading best checkpoint --------------"
 python speech_modules/download_file.py  \
---download_url "https://drive.google.com/file/d/1PRG7dQb3rn2rQ9cm4BV27l5zf2e6xOMX/view?usp=drive_link" \
+--download_url "https://drive.google.com/file/d/17EYwZsjD4g4orzy-LVgZLel6KSs2u-Il/view?usp=sharing" \
 --output_dir "speech_modules/checkpoint/"
 
 echo "-------------- Unzipping checkpoint --------------"
