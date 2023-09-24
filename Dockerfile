@@ -30,5 +30,8 @@ RUN mkdir -p /SOICT_hackathon_2023_SLU_Mekk_Knights/text_correction/checkpoint
 RUN gdown --fuzzy https://drive.google.com/file/d/1_V-xCcfaUoNkEKVvGVZ9Ktw3SEA6Z0AA/view?usp=sharing -O /SOICT_hackathon_2023_SLU_Mekk_Knights/text_correction/checkpoint/checkpoint_best.pt
 RUN gdown --fuzzy https://drive.google.com/file/d/1h9Z-gcIqWu5nzc-tH_OZiDbZgdkdzXpp/view?usp=sharing -O /SOICT_hackathon_2023_SLU_Mekk_Knights/IDSF/checkpoint/checkpoint_best.pt
 
+RUN mkdir -p /SOICT_hackathon_2023_SLU_Mekk_Knights/text_correction/log/bartpho_text_correction
+RUN mkdir -p /SOICT_hackathon_2023_SLU_Mekk_Knights/IDSF/log/phobert_bio
+
 ENV LANG C.UTF-8
 WORKDIR /SOICT_hackathon_2023_SLU_Mekk_Knights
