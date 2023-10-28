@@ -4,6 +4,44 @@ import torch.nn as nn
 from utils.utils import *
 import os
 import termcolor
+from copy import deepcopy
+import math
+
+
+def is_parallel(model):
+    # Returns True if model is of type DP or DDP
+    return type(model) in (nn.parallel.DataParallel, nn.parallel.DistributedDataParallel)
+
+
+def de_parallel(model):
+    return model.module if is_parallel(model) else model
+
+
+class ModelEMA:
+    """ Updated Exponential Moving Average (EMA) from https://github.com/rwightman/pytorch-image-models
+    Keeps a moving average of everything in the model state_dict (parameters and buffers)
+    For EMA details see https://www.tensorflow.org/api_docs/python/tf/train/ExponentialMovingAverage
+    """
+
+    def __init__(self, model, decay=0.9999, tau=2000, updates=0):
+        # Create EMA
+        self.ema = deepcopy(de_parallel(model)).eval()  # FP32 EMA
+        self.updates = updates  # number of EMA updates
+        self.decay = lambda x: decay * (1 - math.exp(-x / tau))  # decay exponential ramp (to help early epochs)
+        for p in self.ema.parameters():
+            p.requires_grad_(False)
+
+    def update(self, model):
+        # Update EMA parameters
+        self.updates += 1
+        d = self.decay(self.updates)
+
+        msd = de_parallel(model).state_dict()  # model state_dict
+        for k, v in self.ema.state_dict().items():
+            if v.dtype.is_floating_point:  # true for FP16 and FP32
+                v *= d
+                v += (1 - d) * msd[k].detach()
+        # assert v.dtype == msd[k].dtype == torch.float32, f'{k}: EMA {v.dtype} and model {msd[k].dtype} must be FP32'
 
 
 class BaseTrainer:
@@ -23,6 +61,7 @@ class BaseTrainer:
                                                                      self.train_loader) * self.config.epochs // self.update_freq,
                                                                  eta_min=1e-7)
         self.current_epoch = 0
+        self.ema = ModelEMA(self.model)  # use EMA during training
         count = 0
         for p in self.model.parameters():
             if p.requires_grad:
@@ -50,7 +89,8 @@ class BaseTrainer:
         checkpoint_path = os.path.join(self.config.snapshot_dir, 'checkpoint_last.pt')
         checkpoint = torch.load(checkpoint_path, map_location=self.config.device)
         self.model.module.load_state_dict(checkpoint['state_dict'])
-        self.optimizer.load_state_dict(checkpoint['optimizer'])
+        # self.optimizer.load_state_dict(checkpoint['optimizer'])
+        self.ema.ema.load_state_dict(checkpoint['ema'])
         self.current_epoch = checkpoint['epoch']
         self.best_score = checkpoint['best_score']
         print("----> load checkpoint")
@@ -58,7 +98,8 @@ class BaseTrainer:
     def save_checkpoint(self, dir='checkpoint_last.pt'):
         checkpoint_path = os.path.join(self.config.snapshot_dir, dir)
         checkpoint = {'state_dict': self.model.module.state_dict(),
-                      'optimizer': self.optimizer.state_dict(),
+                      # 'optimizer': self.optimizer.state_dict(),
+                      'ema': deepcopy(self.ema.ema).state_dict(),
                       'epoch': self.current_epoch,
                       'best_score': self.best_score}
         torch.save(checkpoint, checkpoint_path)
@@ -77,5 +118,4 @@ class BaseTrainer:
                     self.save_checkpoint('checkpoint_best.pt')
                     print("---> save new best")
                 self.save_checkpoint("checkpoint_last.pt")
-            else:
-                self.save_checkpoint(f"checkpoint_{epoch}.pt")
+            self.save_checkpoint(f"checkpoint_{epoch}.pt")

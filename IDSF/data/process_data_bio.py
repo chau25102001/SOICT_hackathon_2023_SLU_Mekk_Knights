@@ -1,4 +1,6 @@
-from datasets import load_dataset
+import copy
+
+from datasets import load_dataset, concatenate_datasets
 import re
 import sys
 import random
@@ -6,7 +8,6 @@ import random
 sys.path.append("..")
 from augment_data_bio import *
 import datasets
-
 
 random.seed(42)
 intent_mapping = {'bật thiết bị': 0,
@@ -166,6 +167,7 @@ if __name__ == "__main__":
     dataset = load_dataset('json', data_files='train_final_20230919.jsonl', split='train')
     dataset = dataset.map(refine_dataset, batched=True, load_from_cache_file=False)
     dataset = dataset.map(refine_slot_label_changing_value, batched=True, load_from_cache_file=False)
+    clean_train = copy.deepcopy(dataset)
     train_split = []
     val_split = []
 
@@ -179,18 +181,23 @@ if __name__ == "__main__":
     #
     # train_set = datasets.concatenate_datasets(train_split)
     # val_set = datasets.concatenate_datasets(val_split)
-    train_set = dataset
-    # augment train set
+    train_set = copy.deepcopy(dataset)
+
     train_set = train_set.map(add_location, batched=True, load_from_cache_file=False)
     train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
     train_set = train_set.map(partial(add_duration, times=1), batched=True, load_from_cache_file=False)
     train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
 
     train_set = train_set.map(random_change_command, batched=True, load_from_cache_file=False)
+    train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
     train_set = train_set.map(random_change_device, batched=True, load_from_cache_file=False)
+    train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
     train_set = train_set.map(random_change_number, batched=True, load_from_cache_file=False)
+    train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
     train_set = train_set.map(partial(random_change_duration, times=1), batched=True, load_from_cache_file=False)
+    train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
     train_set = train_set.map(random_change_time_at, batched=True, load_from_cache_file=False)
+    train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
     train_set = train_set.map(replace_with_synonym, batched=True, load_from_cache_file=False)
     train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
 
@@ -200,6 +207,11 @@ if __name__ == "__main__":
     train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
     train_set = train_set.map(add_confusing_slot, batched=True, load_from_cache_file=False)
     train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
+
+    ratio = int(len(train_set) / len(clean_train))
+    aux_datasets = [clean_train] if ratio <= 1 else [clean_train for i in range(ratio // 2)]
+    print(f"concatenating augmented dataset: {len(train_set)}, and original dataset: {len(clean_train)}")
+    train_set = concatenate_datasets([train_set] + aux_datasets)
 
     processed_train_set = train_set.map(process_sample, batched=True,
                                         remove_columns=train_set.column_names,

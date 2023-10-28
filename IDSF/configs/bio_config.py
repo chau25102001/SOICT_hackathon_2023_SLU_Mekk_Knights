@@ -43,7 +43,7 @@ def get_config(train=True):
     C = edict()
     config = C
     C.seed = 42
-    C.log_dir = "./log/phobert_bio"
+    C.log_dir = "/media/HDD1/chaunm/phobert_bio"
     if not os.path.exists(C.log_dir) and train:
         Path(C.log_dir).mkdir(parents=True, exist_ok=True)
 
@@ -81,6 +81,7 @@ def get_config(train=True):
 
     '''MODEL CONFIG'''
     C.model_card = "vinai/phobert-base-v2"
+    # C.model_card = 'vinai/phobert-large'
     # C.model_card = "Fsoft-AIC/videberta-base"
     C.num_intent_classes = 15
     C.num_slot_classes = len(C.slot_mapping)
@@ -93,10 +94,10 @@ def get_config(train=True):
     '''TRAINER CONFIG'''
     C.train_batch_size = 64
     C.val_batch_size = 32
-    C.total_batch_size = 64
-    C.epochs = 10
-    C.lr = 1e-5
-    C.weight_decay = 1e-3
+    C.total_batch_size = 256
+    C.epochs = 5
+    C.lr = 1e-4
+    C.weight_decay = 1e-4
     C.device = "cuda:0"
     C.best_max = True
 

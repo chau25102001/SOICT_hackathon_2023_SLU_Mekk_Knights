@@ -2,3 +2,6 @@
 __pycache__
 speech_modules/data/
 speech_modules/checkpoint/
+*.zip
+*.jsonl
+/IDSF/log

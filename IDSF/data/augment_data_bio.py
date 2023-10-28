@@ -92,6 +92,8 @@ def random_change_command(sample):
             if slot == "command" and random.uniform(0, 1) < rate:  # found a device slot
                 current_slot_value = sentence[sentence_start:sentence_end]
                 command_choices = possible_intent_command_mapping[intent.lower().strip()]
+                if ('tăng' in intent or 'giảm' in intent) and ('lên' in sentence or 'xuống' in sentence):
+                    command_choices.extend(['chỉnh', 'điều chỉnh'])
                 if len(command_choices) == 0:
                     break
                 while True:  # choose a new device to replace
@@ -157,19 +159,19 @@ def random_change_number(sample):
                 except:
                     print(current_slot_value)
                     continue
-                prefix = ''
-                postfix = ''
-                if value_type == 0:
+                prefix = ' '
+                postfix = ' '
+                if value_type == 0:  # C degree
                     rate = random.uniform(0, 1)
                     if rate < 0.33:  # percentage
                         new_slot_value = str(random.randint(10, 90)) + "%"
                     elif rate < 0.88:  # temperature
-                        new_slot_value = str(random.randint(20, 25)) + random.choice([" độ C", " độ"])
+                        new_slot_value = str(random.randint(20, 25)) + random.choice([" độ C", " độ", ' '])
                     else:  # level
                         new_slot_value = str(random.randint(0, 10))
                         if slot == 'target number':
-                            prefix = random.choice([' mức ', ' nấc ', ''])
-                            postfix = random.choice([' mức ', ' nấc ', ''])
+                            prefix = random.choice([' mức ', ' nấc ', ' '])
+                            postfix = random.choice([' mức ', ' nấc ', ' '])
                 elif value_type != 1:
                     rate = random.uniform(0, 1)
                     if rate < 0.5:
@@ -177,13 +179,19 @@ def random_change_number(sample):
                     else:
                         new_slot_value = str(random.randint(1, 10))
                         if slot == 'target number':
-                            prefix = random.choice([' mức ', ' nấc ', ''])
-                            postfix = random.choice([' mức ', ' nấc ', ''])
-                else:
+                            prefix = random.choice([' mức ', ' nấc ', ' '])
+                            postfix = random.choice([' mức ', ' nấc ', ' '])
+                else:  # integer value for level
                     new_slot_value = str(random.randint(1, 10))
                     if slot == 'target number':
-                        prefix = random.choice([' mức ', ' nấc ', ''])
-                        postfix = random.choice([' mức ', ' nấc ', ''])
+                        prefix = random.choice([' mức ', ' nấc ', ' '])
+                        postfix = random.choice([' mức ', ' nấc ', ' '])
+                if prefix != ' ' and postfix != ' ':
+                    if random.random() < 0.5:
+                        postfix = ' '
+                    else:
+                        prefix = ' '
+
                 new_sentence = sentence[:sentence_start] + prefix + new_slot_value + postfix + sentence[sentence_end:]
                 new_sentence_annotation = sentence_annotation[
                                           :annotation_start - 5 - len(slot)] + prefix + sentence_annotation[

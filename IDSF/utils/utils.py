@@ -1,9 +1,26 @@
+import termcolor
 import torch
 import random
 import numpy as np
 import os
 
 import transformers
+
+
+def ensemble_checkpoints(checkpoints, weights=None):
+    normalized_weights = [1 / len(checkpoints) for _ in checkpoints]
+    if weights is not None:
+        assert len(checkpoints) == len(weights)
+        normalized_weights = np.array(weights) / np.sum(weights)
+    print(termcolor.colored(f"ensemble {len(checkpoints)} models, with weights: {normalized_weights}"))
+    result = {}
+    for i, cp in enumerate(checkpoints):
+        for k in cp.keys():
+            if k not in result:
+                result[k] = cp[k] * normalized_weights[i]
+            else:
+                result[k] = result[k] + normalized_weights[i] * cp[k]
+    return result
 
 
 class AverageMeter(object):

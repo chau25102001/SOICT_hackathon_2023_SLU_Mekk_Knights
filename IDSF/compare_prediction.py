@@ -3,7 +3,9 @@ import json
 
 pred_old = load_dataset("json", data_files="predictions_old.jsonl", split='train')
 pred_new = load_dataset("json", data_files="predictions.jsonl", split='train')
-transcript = load_dataset("json", data_files="data/max255_infer.jsonl", split='train')
+transcript = load_dataset("json",
+                          data_files="/home/chau/PycharmProjects/SOICT_hackathon_2023_SLU_Mekk_Knights/text_correction/correction.jsonl",
+                          split='train')
 pred_old = pred_old.sort("file")
 pred_new = pred_new.sort("file")
 transcript = transcript.sort("id")
