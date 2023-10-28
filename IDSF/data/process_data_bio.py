@@ -214,6 +214,8 @@ if __name__ == "__main__":
     train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
     train_set = train_set.map(clean_command, batched=True, load_from_cache_file=False)
     train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
+    train_set = train_set.map(partial(sequential_task, prob=0.1), batched=True, load_from_cache_file=False)
+    train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
 
     ratio = int(len(train_set) / len(clean_train))
     aux_datasets = [clean_train] if ratio <= 1 else [clean_train for i in range(ratio // 2)]
@@ -234,5 +236,5 @@ if __name__ == "__main__":
     processed_val_set = processed_val_set.filter(lambda x: filter_invalid_annotation(x), load_from_cache_file=False)
     print(len(processed_train_set))
     print(len(processed_val_set))
-    processed_train_set.save_to_disk("data_bio/processed_train")
-    processed_val_set.save_to_disk("data_bio/processed_val")
+    processed_train_set.save_to_disk("data_bio/processed_train_seq_task")
+    processed_val_set.save_to_disk("data_bio/processed_val_seq_task")

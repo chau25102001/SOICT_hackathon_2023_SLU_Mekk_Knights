@@ -1,4 +1,3 @@
-
 from base.base_trainer import BaseTrainer
 from dataset.text_correction_dataset import *
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
@@ -14,7 +13,6 @@ class BartPhoCorrectionTrainer(BaseTrainer):
         super().__init__(config)
         self.current_step = 0
         self.criterion = nn.CrossEntropyLoss()
-
 
     def get_train_loader(self, config) -> data.DataLoader:
         tokenizer = AutoTokenizer.from_pretrained(config.model_card, use_fast=True)
@@ -69,7 +67,7 @@ class BartPhoCorrectionTrainer(BaseTrainer):
             loss.backward()
             train_loss_meter.update(loss.item(), weight=1 / self.update_freq)
             if self.current_step % self.update_freq == 0:  # SGD
-                clip_grad_norm_(self.model.parameters(), 1.)
+                clip_grad_norm_(self.model.parameters(), 5.)
                 self.optimizer.step()
                 self.lr_scheduler.step()
                 self.optimizer.zero_grad()

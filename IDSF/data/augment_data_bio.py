@@ -1116,6 +1116,51 @@ def clean_command(sample):
     return new_sample
 
 
+def sequential_task(samples, prob=0.5):
+    new_samples = samples.copy()
+
+    for idx in range(len(samples['sentence'])):
+        reversed_intent = opposite_intent_mapping[new_samples['intent'][idx]]
+        if reversed_intent is None:
+            continue
+
+        try:
+            reversed_command = random.choice(possible_intent_command_mapping[reversed_intent])
+        except IndexError:
+            continue
+        sentence = new_samples['sentence'][idx]
+        sentence_annotation = new_samples['sentence_annotation'][idx]
+        # print(sentence, sentence_annotation)
+        indices = find_annotation_indices(sentence, sentence_annotation)
+        device = ''
+        for slot, sentence_start, sentence_end, annotation_start, annotation_end in indices:
+            if slot == 'device':
+                device = sentence[sentence_start: sentence_end]
+                break
+
+        conjunc = f"{random.choice(sequential_conjunction)}"
+        conjunc_postfix = random.choice(middle_postfix_no_commad)
+        new_sentence = sentence+ " " + conjunc + ' ' + reversed_command + " " + device + " " + conjunc_postfix
+
+        if device.strip() != "":
+            device_annotation = f'[ device : {device} ]'
+        else:
+            device_annotation = ''
+        new_sentence_annotation = sentence_annotation + " " + conjunc + " " + reversed_command + " " + device_annotation + " " + conjunc_postfix
+        # print(new_sentence_annotation, new_sentence)
+        if random.random() < prob:
+            for k in new_samples.keys():
+                if k not in ['sentence', 'sentence_annotation']:
+                    new_samples[k].append(samples[k][idx])
+                elif k == 'sentence':
+                    new_samples[k].append(new_sentence)
+                elif k == 'sentence_annotation':
+                    new_samples[k].append(new_sentence_annotation)
+    return new_samples
+
+
+sequential_conjunction = ['rồi', 'sau đó', 'sau đó thì', 'và rồi', 'sau đấy', 'tiếp theo', 'tiếp đó thì']
+
 if __name__ == "__main__":
     from process_data_bio import process_sample
 
@@ -1147,10 +1192,11 @@ if __name__ == "__main__":
     # dataset = dataset.map(random_change_time_at, batched=True)
     # dataset = dataset.map(random_change_duration, batched=True)
     # dataset = dataset.map(random_change_location, batched=True)
-    dataset = dataset.map(generate_yes_no, batched=True)
-    dataset = dataset.map(add_time_at, batched=True)
-    dataset = dataset.map(strip_spaces, batched=True)
-    dataset = dataset.map(reverse_intent, batched=True)
+    # dataset = dataset.map(generate_yes_no, batched=True)
+    # dataset = dataset.map(add_time_at, batched=True)
+    # dataset = dataset.map(strip_spaces, batched=True)
+    # dataset = dataset.map(reverse_intent, batched=True)
+    dataset = dataset.map(partial(sequential_task, prob=1.), batched=True, load_from_cache_file=False)
     dataset = dataset.map(strip_spaces, batched=True)
     dataset = dataset.map(clean_command, batched=True)
     dataset = dataset.map(process_sample, batched=True,
@@ -1179,10 +1225,9 @@ if __name__ == "__main__":
     print(count)
 
     dataset = dataset.shuffle()
+    dataset = dataset.filter(lambda x: 'sau đó' in x['original_sentence'])
 
-    subset = dataset.filter(lambda x: 'làm nóng' in x['original_sentence'])
-    print(len(subset))
-    for i, sample in enumerate(subset):
+    for i, sample in enumerate(dataset):
         print(sample)
         print("\n")
         if i >= 10:

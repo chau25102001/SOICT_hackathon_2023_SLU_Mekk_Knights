@@ -10,9 +10,9 @@ from utils.utils import ner, ensemble_checkpoints
 from configs.bio_config import get_config
 from datasets import load_dataset
 import json
-from data.constants import text_num_mapping
 import re
 from argparse import ArgumentParser
+import json
 
 parser = ArgumentParser(description='testing')
 parser.add_argument("--stt_pred_path", type=str, default='/SOICT_hackathon_2023_SLU_Mekk_Knights/stt_pred.jsonl',
@@ -24,6 +24,8 @@ if __name__ == "__main__":
     import warnings
 
     data_path = args.stt_pred_path
+    with open("data/text_to_num.json", 'r') as f:
+        text_num_mapping = json.load(f)
     if data_path is None or not os.path.exists(data_path):
         print(termcolor.colored(f"ERROR: cannot find stt prediction: {data_path}"))
         exit()
