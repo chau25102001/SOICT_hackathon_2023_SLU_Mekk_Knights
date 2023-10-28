@@ -1,3 +1,4 @@
+pydub==0.25.1
 denoiser==0.1.5
 termcolor
 datasets
