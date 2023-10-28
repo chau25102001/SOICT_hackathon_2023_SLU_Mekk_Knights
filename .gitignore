@@ -5,3 +5,4 @@ speech_modules/checkpoint/
 *.zip
 *.jsonl
 /IDSF/log
+*.jsonl

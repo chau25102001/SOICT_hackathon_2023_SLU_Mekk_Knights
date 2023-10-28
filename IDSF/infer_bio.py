@@ -176,7 +176,8 @@ if __name__ == "__main__":
                             value = value[:pos - 1] + value[pos:]
                     if 'độ' in value and current_slot.lower() in ['changing value', 'target number']:
                         cond3 = True
-
+                    if current_slot == 'chếch':
+                        current_slot = 'check'
                     # value.replace(" phần trăm", "%").strip()
                     if not (('hoạt cảnh' in intent and current_slot.lower() == 'command') or (
                             'hoạt cảnh' not in intent and current_slot.lower() == 'scene')):

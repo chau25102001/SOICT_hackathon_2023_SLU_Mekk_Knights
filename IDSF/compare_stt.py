@@ -1,8 +1,12 @@
 from datasets import load_dataset
 import json
 
-dataset_base = load_dataset("json", data_files="data/max255_infer.jsonl", split='train')
-dataset_large = load_dataset("json", data_files="/home/chaunm/workspace/bartpho/correction.jsonl", split='train')
+dataset_base = load_dataset("json",
+                            data_files="/home/chau/PycharmProjects/SOICT_hackathon_2023_SLU_Mekk_Knights/text_correction/asr_private_test_01.jsonl",
+                            split='train')
+dataset_large = load_dataset("json",
+                             data_files="/home/chau/PycharmProjects/SOICT_hackathon_2023_SLU_Mekk_Knights/text_correction/asr_private_test_update.jsonl",
+                             split='train')
 
 dataset_base = dataset_base.sort("id")
 id_list_base = [s['id'] for s in dataset_base]

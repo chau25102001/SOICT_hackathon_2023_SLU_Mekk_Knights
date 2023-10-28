@@ -24,3 +24,5 @@
 /nhap.py
 /statistics.py
 nhap.py
+infer_frankenstein.py
+*.jsonl
