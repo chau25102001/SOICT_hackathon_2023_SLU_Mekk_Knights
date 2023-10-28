@@ -186,7 +186,12 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                    'đèn cổng', 'đèn học', 'đèn led', 'đèn làm việc',
                                                    'đèn ngủ', 'đèn sưởi', 'đèn thả', 'đèn tranh',
                                                    'đèn trụ cổng', 'đèn tuýp', 'đèn tường', 'đèn âm trần',
-                                                   'đèn ốp tường',
+                                                   'đèn ốp tường', 'lò sưởi', 'lò nướng',
+                                                   'lò vi sóng',
+                                                   'máy nghe nhạc', 'máy phát nhạc', 'radio', 'máy chơi đĩa', 'máy CD',
+                                                   'máy DVD',
+                                                   'lò sưởi', 'lò nướng bánh mỳ', 'lò nướng bánh', 'lò vi sóng',
+                                                   'lò vi ba',
                                                    'máy tính bảng', 'điện thoại thông minh', 'ipad', 'iphone'],
                                   'giảm mức độ của thiết bị': ['quạt hút mùi', 'quạt treo tường', 'quạt thông gió',
                                                                'quạt trần', 'quạt', 'quạt hơi nước', 'quạt điện',
@@ -303,7 +308,7 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                   'loa ti vi', 'loa máy tính', 'lò nướng', 'lò vi sóng',
                                                   'lò sưởi',
                                                   'máy chơi game', 'máy fax', 'máy giặt', 'máy hút bụi', 'máy hút mùi',
-                                                  'máy in', 'máy lạnh', 'máy mát xa', 'máy nghe nhạc',
+                                                  'máy in', 'máy lạnh', 'máy mát xa',
                                                   'máy pha cafe', 'máy rửa bát', 'máy sưởi',
                                                   'máy tính', 'máy tính xách tay',
                                                   'quạt treo tường', 'quạt hút mùi', 'quạt thông gió',
@@ -324,7 +329,9 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                   'cửa cổng', 'cổng', 'cửa ra vào', 'cửa', 'cổng ra vào', 'rèm ngủ',
                                                   'laptop', 'máy tính bảng', 'cửa tủ', 'rèm', 'màn ngủ', 'màn cuốn',
                                                   'màn cửa', 'radio', 'stereo', 'rèm cửa', 'rèm cửa sổ',
-                                                  'mành cửa', 'mành cuốn', 'camera'],
+                                                  'mành cửa', 'mành cuốn', 'camera', 'lò nướng',
+                                                  'lò vi sóng',
+                                                  'lò sưởi', ],
                                   'tăng mức độ của thiết bị': ['quạt hút mùi', 'quạt treo tường', 'quạt thông gió',
                                                                'quạt trần', 'quạt', 'quạt hơi nước', 'quạt điện',
                                                                'quạt gió', 'quạt đứng', 'quạt bàn', 'quạt máy',
@@ -412,7 +419,9 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                    'đèn cổng', 'đèn học', 'đèn led', 'đèn làm việc',
                                                    'đèn ngủ', 'đèn sưởi', 'đèn thả', 'đèn tranh',
                                                    'đèn trụ cổng', 'đèn tuýp', 'đèn tường', 'đèn âm trần',
-                                                   'đèn ốp tường'],
+                                                   'đèn ốp tường', 'máy nghe nhạc', 'máy phát nhạc', 'radio',
+                                                   'máy chơi đĩa', 'máy CD',
+                                                   'máy DVD', ],
                                   'đóng thiết bị': ['bình nóng lạnh',
                                                     'bóng chùm', 'bóng compact', 'bóng huỳnh quang', 'bóng hắt',
                                                     'bóng ngủ',
@@ -452,10 +461,10 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
 
 possible_intent_command_mapping = {'bật thiết bị': ['kích hoạt', "khởi động", 'mở', 'chạy'],
                                    'giảm mức độ của thiết bị': ['hạ', 'cho thấp', 'cho nhỏ', 'làm nhỏ', 'cho bé',
-                                                                'làm bé', 'vặn nhỏ'],
+                                                                'làm bé', 'vặn nhỏ', 'đưa xuống'],
                                    'giảm nhiệt độ của thiết bị': ['hạ', 'hạ nhiệt', 'giảm nhiệt', 'làm mát', 'làm lạnh',
                                                                   'cho thấp', 'cho bé', 'cho nhỏ', 'chỉnh thấp',
-                                                                  'chỉnh nhỏ', 'chỉnh bé', 'bật bé'],
+                                                                  'chỉnh nhỏ', 'chỉnh bé', 'bật bé', 'đưa lên'],
                                    'giảm âm lượng của thiết bị': ['hạ', 'cho nhỏ', 'hạ bé', 'cho bé', 'bớt', 'bật nhỏ',
                                                                   'bật bé'],
                                    'giảm độ sáng của thiết bị': ['hạ', 'làm tối', 'cho tối', 'giảm sáng', 'bớt',
@@ -465,11 +474,11 @@ possible_intent_command_mapping = {'bật thiết bị': ['kích hoạt', "khở
                                    'kích hoạt cảnh': [],
                                    'mở thiết bị': ['mở'],
                                    'tăng mức độ của thiết bị': ['nâng', 'làm to', 'cho to', 'vặn to', 'vặn lớn',
-                                                                'cho lớn', 'bật to'],
+                                                                'cho lớn', 'bật to', 'đưa lên'],
                                    'tăng nhiệt độ của thiết bị': ['nâng', 'làm ấm', 'làm nóng', 'cho to', 'cho lớn',
-                                                                  'bật to'],
+                                                                  'bật to', 'đưa lên'],
                                    'tăng âm lượng của thiết bị': ['nâng', 'vặn to', 'cho to', 'bật to', 'bật to',
-                                                                  'bật lớn'],
+                                                                  'bật lớn', 'đưa lên'],
                                    'tăng độ sáng của thiết bị': ['nâng', 'làm sáng', 'cho sáng', 'bật sáng'],
                                    'tắt thiết bị': ["ngừng", "dừng", 'ngắt', 'sập nguồn', 'ngắt nguồn', 'ngắt điện'],
                                    'đóng thiết bị': ['khóa', 'sập', 'chốt']}
@@ -480,6 +489,7 @@ bad_command = ['cho thấp', 'cho nhỏ', 'làm nhỏ', 'cho bé',
                'làm mờ', 'cho mờ', 'bật bé', 'bật nhỏ',
                'làm to', 'cho to', 'làm ấm', 'làm nóng', 'cho to', 'cho lớn',
                'cho lớn', 'bật to', 'bật lớn', 'làm sáng', 'cho sáng', 'bật sáng',
+               'đưa lên', 'đưa lên'
                ]
 special_command = ['vặn', 'bật']
 
@@ -1050,19 +1060,24 @@ reversed_command_prefix = [
     "cấm"
 ]
 device_keyword_command_mapping_dong_thiet_bi = {
-    'cửa': ['xếp', 'gấp', 'khép', 'sập'],
-    'rèm': ['xếp', 'gấp', 'khép'],
+    'cửa': ['xếp', 'gấp', 'khép', 'sập', 'kéo'],
+    'rèm': ['xếp', 'gấp', 'khép', 'kéo'],
     'vòi': ['vặn'],
+    'màn': ['xếp', 'gấp', 'kéo']
 }
 device_keyword_command_mapping_mo_thiet_bi = {
-    'lò': ['quay'],
+    'cửa': ['kéo'],
+    'rèm': ['kéo'],
+    'màn': ['kéo']
 
 }
 device_keyword_command_mapping_bat_thiet_bi = {
     'radio': ['phát'],
     'CD': ['phát'],
     'DVD': ['phát'],
-    'nhạc': ['phát']
+    'nhạc': ['phát'],
+    'lò': ['quay'],
+
 }
 
 human_names = [
