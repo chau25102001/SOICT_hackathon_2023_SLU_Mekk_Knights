@@ -1005,6 +1005,7 @@ def create_postfix(intent, subject, type=1):
     return postfix.strip(), label.strip(), type
 
 
+
 opposite_intent_mapping = {'bật thiết bị': 'tắt thiết bị',
                            'giảm mức độ của thiết bị': 'tăng mức độ của thiết bị',
                            'giảm nhiệt độ của thiết bị': 'tăng nhiệt độ của thiết bị',
