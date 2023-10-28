@@ -6,3 +6,5 @@ if [ ! -f assets/infore/hifigan/g_01135000 ]; then
   gdown --id 1-NTQc4RDK-DgBIQVk-t4dgtYI1MUbBIk -O assets/infore/hifigan/g_01135000
   python3 -m vietTTS.hifigan.convert_torch_model_to_haiku --config-file=assets/hifigan/config.json --checkpoint-file=assets/infore/hifigan/g_01135000
 fi
+
+pip install --upgrade "jax[cuda11_local]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
