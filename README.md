@@ -6,7 +6,7 @@
 Navigate to the project folder ```cd /SOICT_hackathon_2023_SLU_Mekk_Knights```
 
 Run the following bash files in respective order to prepare for training:
-- ```bash ./vietTTS/scripts/gen_data.sh```: This may take a huge amount of time (feel free to skip it, the next step will download generated data), since we have to generate synthesis speech data from all of our augmented sentences from the public training set.
+- ```bash ./vietTTS/scripts/gen_data.sh```: This may take a huge amount of time (feel free to skip it, the next step will download generated data), since we have to generate synthesis speech data from all of our automatically augmented sentences from the public training set.
 - ```bash ./speech_modules/scripts/prepare_data.sh``` : Download the original training dataset, unzip the training and public audio files (currently saved at *speech_modules/data/original_data*)
 - ```bash ./speech_modules/scripts/prepare_noise_data.sh```: Download and unzip the ESC-50 environmental noise dataset [https://github.com/karolpiczak/ESC-50] in order to augment the training audio files
 - ```bash ./speech_modules/scripts/preprocess.sh```: Preprocess our training dataset
