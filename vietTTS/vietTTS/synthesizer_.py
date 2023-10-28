@@ -176,8 +176,8 @@ def loanwords_subs(text):
 if __name__ == '__main__':
 	from argparse import ArgumentParser
 	parser = ArgumentParser()
-	parser.add_argument("-ip", "--input_path", default="data_bio/processed_train", type=str, help="input huggingface format dataset")
-	parser.add_argument("-op", "--output_folder", default="/Train_tts", type=str, help="output data folder")
+	parser.add_argument("-ip", "--input_path", default="../data_bio/processed_train_seq_task", type=str, help="input huggingface format dataset")
+	parser.add_argument("-op", "--output_folder", default="../speech_modules/data/Train_tts/audio", type=str, help="output data folder")
 	args = parser.parse_args()
 
 	# input_path = "data_bio/processed_train"
