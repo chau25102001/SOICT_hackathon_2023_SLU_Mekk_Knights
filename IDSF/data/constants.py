@@ -785,6 +785,213 @@ def generate_sentence():
 intent_rate_mapping = {
 
 }
+
+list_prefix_verbs = possible_intent_command_mapping['kiểm tra tình trạng thiết bị']
+list_subject = ['em', 'anh', 'chị', 'tớ', 'tôi', 'tao', 'chúng tôi', 'ta', 'chúng ta', 'bọn tôi', 'bọn anh', 'bọn chị',
+                'anh ấy', 'chị ấy']  # TODO: thêm tên riêng
+list_linking_verb_default = ['cần biết', 'muốn biết', 'muốn hỏi', 'cần biết', 'cần xem', 'cần hỏi']
+list_linking_verb_include_command = ['cần ' + c for c in list_prefix_verbs] + ['muốn ' + c for c in list_prefix_verbs]
+
+
+def create_prefix(include_postfix=False):
+    choice = random.random()
+    subject = None
+    prefix_annotation = ''
+
+    if choice < 0.3:  # a muốn xem
+        type = 1
+        subject = random.choice(list_subject)
+        command_in_linking_verb = random.random() < 0.3
+        if command_in_linking_verb:
+            linking_verb = random.choice(list_linking_verb_default)
+        else:
+            linking_verb = random.choice(list_linking_verb_include_command)
+            linking_verb_command = " ".join(linking_verb.split()[1:])
+
+        prefix_head = random.choice(['đang', 'vẫn', 'rất'])
+        prefix = "{} {} {}".format(subject, prefix_head,
+                                   linking_verb)
+        if command_in_linking_verb:
+            prefix_annotation = prefix
+        else:
+            prefix_annotation = "{} {} {}".format(subject, prefix_head,
+                                                  linking_verb.split()[0] + f" [ command : {linking_verb_command} ]")
+    elif choice < 0.6:  # xem cho a
+        type = 2
+        subject = random.choice(list_subject)
+
+        command = random.choice(list_prefix_verbs)
+        # subject = random.choice(['cho ' + subject, ''])
+        prefix_tail = random.choice(['cho ' + subject, ''])
+        prefix = '{} {}'.format(command,
+                                prefix_tail)
+        if include_postfix:
+            prefix_annotation = prefix
+        else:
+            prefix_annotation = f'[ command : {command} ] {prefix_tail}'
+    else:
+        type = 3
+        prefix = ''
+    while "  " in prefix:
+        prefix = prefix.replace("  ", ' ')
+    while "  " in prefix_annotation:
+        prefix_annotation.replace("  ", " ")
+    return prefix.strip(), type, subject, prefix_annotation.strip()
+
+
+state_prefix = ['còn', 'có', 'đang', 'có đang', 'vẫn đang', 'vẫn còn', 'có còn']
+intent_state_mapping = {
+    'bật thiết bị': ['mở', 'chạy', 'hoạt động', 'dùng được', 'dùng tốt', 'dùng ổn', 'sống', 'chạy ổn', 'chạy tốt'],
+    'giảm mức độ của thiết bị': ['mở', 'chạy', 'hoạt động', 'dùng được', 'dùng tốt', 'dùng ổn', 'sống', 'chạy ổn',
+                                 'chạy tốt'],
+    'giảm nhiệt độ của thiết bị': ['mở', 'chạy', 'hoạt động', 'dùng được', 'dùng tốt', 'dùng ổn', 'sống', 'chạy ổn',
+                                   'chạy tốt', 'nóng',
+                                   'ấm', ],
+    'giảm âm lượng của thiết bị': ['mở', 'chạy', 'hoạt động', 'dùng được', 'dùng tốt', 'dùng ổn', 'sống', 'chạy ổn',
+                                   'chạy tốt', 'to',
+                                   'lớn', 'ồn'],
+    'giảm độ sáng của thiết bị': ['mở', 'chạy', 'hoạt động', 'dùng được', 'dùng tốt', 'dùng ổn', 'sống', 'chạy ổn',
+                                  'chạy tốt', 'sáng',
+                                  'chói'],
+    'hủy hoạt cảnh': [],
+    'kiểm tra tình trạng thiết bị': ['mở', 'chạy', 'hoạt động', 'dùng được', 'dùng tốt', 'dùng ổn', 'sống', 'chạy ổn',
+                                     'chạy tốt'],
+    'kích hoạt cảnh': [],
+    'mở thiết bị': ['mở', 'chạy', 'hoạt động', 'dùng được', 'dùng tốt', 'dùng ổn', 'sống', 'chạy ổn', 'chạy tốt'],
+    'tăng mức độ của thiết bị': ['mở', 'chạy', 'hoạt động', 'dùng được', 'dùng tốt', 'dùng ổn', 'sống', 'chạy ổn',
+                                 'chạy tốt', 'yếu', 'chạy yếu'],
+    'tăng nhiệt độ của thiết bị': ['mở', 'chạy', 'hoạt động', 'dùng được', 'dùng tốt', 'dùng ổn', 'sống', 'chạy ổn',
+                                   'chạy tốt', 'lạnh',
+                                   'mát'],
+    'tăng âm lượng của thiết bị': ['mở', 'chạy', 'hoạt động', 'dùng được', 'dùng tốt', 'dùng ổn', 'sống', 'chạy ổn',
+                                   'chạy tốt',
+                                   'nhỏ', 'bé'],
+    'tăng độ sáng của thiết bị': ['mở', 'chạy', 'hoạt động', 'dùng được', 'dùng tốt', 'dùng ổn', 'sống', 'chạy ổn',
+                                  'chạy tốt',
+                                  'tối', 'mờ', 'thiếu sáng'],
+    'tắt thiết bị': ['mở', 'chạy', 'hoạt động', 'dùng được', 'dùng tốt', 'dùng ổn', 'sống', 'chạy ổn', 'chạy tốt'],
+    'đóng thiết bị': ['mở', 'chạy', 'hoạt động', 'dùng được', 'dùng tốt', 'dùng ổn', 'sống', 'chạy ổn', 'chạy tốt']}
+
+middle_postfix_commad = ['không vậy ?', 'không nhỉ ?', 'hay không ?', 'à ?', 'không vậy .', 'không nhỉ .',
+                         'hay không .', 'à .', 'không vậy ,', 'không nhỉ ,', 'hay không ,', 'à ,']
+middle_postfix_no_commad = ['nhé', 'nha', 'nhá', 'không', 'nhở']
+
+
+def create_middle(intent, include_postfix=False):
+    middle_device = possible_intent_device_mapping[intent]
+    state = intent_state_mapping[intent]
+    choice = random.random()
+    label = ''
+    middle_prefix = ''
+    if choice < 0.3:
+        location_prefix = random.choice(['ở ', 'trong ', 'ngoài ', 'gần ', 'bên ', 'cạnh ', 'trên ',
+                                         'dưới '])
+        location = random.choice(location_list)
+        one, two, three, four, five, six = (random.choice(['cái', 'chiếc', 'con', 'cái con', 'thằng', 'cái thằng', '']),
+                                            random.choice(middle_device),
+                                            random.choice([location_prefix + location, '']),
+                                            random.choice(state_prefix),
+                                            random.choice(state),
+                                            random.choice(
+                                                middle_postfix_commad if include_postfix else middle_postfix_no_commad))
+
+        middle_prefix = random.choice(['hình như ', 'hay là ', ''])
+        middle = "{} {} {} {} {} {}".format(one, two, three, four, five, six)
+        middle = middle_prefix + middle
+        label = middle_prefix + f"{one} [ device : {two} ] " + (
+            '' if three == '' else f'{location_prefix}  [ location : {location} ] ') + f'{four} {five} {six}'
+    elif choice < 0.6:
+        location_prefix = random.choice(['ở ', 'trong ', 'ngoài ', 'gần ', 'bên ', 'cạnh ', 'trên ',
+                                         'dưới '])
+        location = random.choice(location_list)
+        one, two, three, four, five, six = (random.choice([location_prefix + location, '']),
+                                            random.choice(['cái', 'chiếc', 'con', 'cái con', 'thằng', 'cái thằng', '']),
+                                            random.choice(middle_device),
+
+                                            random.choice(state_prefix),
+                                            random.choice(state),
+                                            random.choice(
+                                                middle_postfix_commad if include_postfix else middle_postfix_no_commad))
+        middle_prefix = random.choice(['hình như ', 'hay là ', ''])
+
+        middle = "{} {} {} {} {} {}".format(one, two, three, four, five, six)
+        middle = middle_prefix + middle
+        label = middle_prefix + (
+            '' if one == '' else f'{location_prefix}  [ location : {location} ] ') + f"{two} [ device : {three} ] {four} {five} {six}"
+
+    else:
+        location_prefix = random.choice(['ở ', 'trong ', 'ngoài ', 'gần ', 'bên ', 'cạnh ', 'trên ',
+                                         'dưới '])
+        location = random.choice(location_list)
+        one, two, three, four, five, six = (random.choice(['cái', 'chiếc', 'con', 'cái con', 'thằng', 'cái thằng', '']),
+                                            random.choice(middle_device),
+                                            random.choice(state_prefix),
+                                            random.choice(state),
+                                            random.choice([location_prefix + location, '']),
+                                            random.choice(
+                                                middle_postfix_commad if include_postfix else middle_postfix_no_commad))
+
+        middle = "{} {} {} {} {} {}".format(one, two, three, four, five, six)
+        middle = middle_prefix + middle
+        label = middle_prefix + f"{one} [ device : {two} ] " + f'{three} {four} ' + (
+            '' if five == '' else f'{location_prefix}  [ location : {location} ] ') + f"{six}"
+    while "  " in middle:
+        middle = middle.replace("  ", " ")
+    while "  " in label:
+        label = label.replace("  ", " ")
+    return middle.strip(), label.strip()
+
+
+subject_postfix = ['hộ', 'cho', 'giúp', 'dùm']
+
+
+def create_postfix(intent, subject, type=1):
+    label = ''
+    if subject is None:
+        subject = random.choice(subject_list)
+    if type != 2:
+        postfix_command = possible_intent_command_mapping[intent]
+        command = random.choice(postfix_command)
+        one, two, three = (command,
+                           random.choice([random.choice(subject_postfix) + ' ' + subject, '']),
+                           random.choice(['nhé', 'nhá', 'nhớ', 'được không', 'đi']))
+        postfix = "{} {} {}".format(one, two, three)
+        label = f"[ command : {one} ] {two} {three}"
+    else:
+        postfix = ''
+    while "  " in postfix:
+        postfix = postfix.replace("  ", " ")
+    while "  " in label:
+        label = label.replace("  ", " ")
+    return postfix.strip(), label.strip()
+
+
+opposite_intent_mapping = {'bật thiết bị': 'tắt thiết bị',
+                           'giảm mức độ của thiết bị': 'tăng mức độ của thiết bị',
+                           'giảm nhiệt độ của thiết bị': 'tăng nhiệt độ của thiết bị',
+                           'giảm âm lượng của thiết bị': 'tăng âm lượng của thiết bị',
+                           'giảm độ sáng của thiết bị': 'tăng độ sáng của thiết bị',
+                           'hủy hoạt cảnh': 'kích hoạt cảnh',
+                           'kiểm tra tình trạng thiết bị': None,
+                           'kích hoạt cảnh': 'hủy hoạt cảnh',
+                           'mở thiết bị': '',
+                           'tăng mức độ của thiết bị': ['nâng', 'làm to', 'cho to', 'vặn to', 'vặn lớn',
+                                                        'cho lớn', 'bật to'],
+                           'tăng nhiệt độ của thiết bị': ['nâng', 'làm ấm', 'làm nóng', 'cho to', 'cho lớn',
+                                                          'bật to'],
+                           'tăng âm lượng của thiết bị': ['nâng', 'vặn to', 'cho to', 'bật to', 'bật to',
+                                                          'bật lớn'],
+                           'tăng độ sáng của thiết bị': ['nâng', 'làm sáng', 'cho sáng', 'bật sáng'],
+                           'tắt thiết bị': ["ngừng", "dừng", 'ngắt', 'sập nguồn', 'ngắt nguồn', 'ngắt điện'],
+                           'đóng thiết bị': ['khóa', 'sập', 'chốt']}
+
+template = "[[xem] [cho abc]] [[cái] {device} [{location}] [còn] {verb adj} [không]?] [[command] [cho abc] [nhé]]"
 if __name__ == "__main__":
-    for i in range(10):
-        print(generate_sentence().strip())
+    for i in range(20):
+        prefix, type, subject, annotation = create_prefix(include_postfix=False)
+        # print(prefix + " " + create_middle('bật thiết bị', include_postfix=True) + ' ' + create_postfix(
+        #     'đóng thiết bị',
+        #     subject, type), type)
+        middle, label = create_middle('bật thiết bị', include_postfix=True)
+        post, label_post = create_postfix('tắt thiết bị', subject=subject, type=type)
+        print(prefix + " " + middle + " " + post, annotation + " " + label + " " + label_post)

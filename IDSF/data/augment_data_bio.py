@@ -965,6 +965,13 @@ def random_scene_aug(sample, prob=.7):
                         new_sample[k].append(new_intent)
     return new_sample
 
+def generate_yes_no(sample, prob=0.7):
+    new_sample = sample.copy()
+    for i in range(len(sample['sentence'])):
+        intent = sample['intent'][i]
+
+
+
 
 if __name__ == "__main__":
     from process_data_bio import process_sample
