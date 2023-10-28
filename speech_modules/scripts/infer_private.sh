@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0  python speech_modules/wav2vec2/infer.py --test_dir "speech_modules/data/original_data/downsampled_private_test/" --checkpoint_path "speech_modules/checkpoint/ensemble_2710" --output_path "asr_private_test_01.jsonl" --lm_alpha 0.5

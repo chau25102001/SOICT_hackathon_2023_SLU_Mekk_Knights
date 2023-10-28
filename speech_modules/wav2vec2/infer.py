@@ -21,6 +21,7 @@ import argparse
 
 import os
 from transformers.trainer_callback import TrainerState
+import re
 
 if __name__ == '__main__':
 
@@ -85,6 +86,7 @@ if __name__ == '__main__':
             logits = model(input_values).logits
         pred_ids = torch.argmax(logits, dim=-1)
         pred_str = processor.decode(logits.cpu().detach().numpy()[0], beam_width=beam_width, alpha=alpha, beta=1.5)[0]
+        pred_str = res = re.sub(r'[^\w\s]', '', pred_str)
         id = batch['file'].split('/')[-1].replace('.wav', '')
         test_output.append({'id': id, 'sentence': pred_str})
 

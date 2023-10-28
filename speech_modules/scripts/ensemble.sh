@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0 python speech_modules/wav2vec2/ensemble.py 
