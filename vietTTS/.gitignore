@@ -1,0 +1,69 @@
+gta/
+train_data/
+test_data/
+assets/infore/
+# IDE files
+.idea
+.vscode
+
+# Mac files
+.DS_Store
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebook
+.ipynb_checkpoints
+stt_annotations.jsonl
+stt_annotations_yes_no_rev.jsonl
+stt_annotations_yes_no.jsonl
+stt_yes_no_rev.tar.gz
+data_tts
+data_bio
+4492_augmeted_speech.tar.gz
+asr_private_test_01.jsonl
+augmented_speech.tar.gz
+generated_data/yes_no
+data_tts_yes_no_rev
+/data_tts_yes_no/
+4492_augmeted_speech.tar.gz
+note.txt
+test.ipynb
+tts.ipynb
+generated_data/yes_no
