@@ -1026,7 +1026,8 @@ if __name__ == "__main__":
         prefix, type, subject, annotation = create_prefix(include_postfix=False)
         # print(prefix + " " + create_middle('bật thiết bị', include_postfix=True) + ' ' + create_postfix(
         #     'đóng thiết bị',
-        #     subject, type), type)
-        middle, label = create_middle('bật thiết bị', include_postfix=True)
-        post, label_post, type = create_postfix('tắt thiết bị', subject=subject, type=type)
-        print(prefix + " " + middle + " " + post, annotation + " " + label + " " + label_post, type)
+        # #     subject, type), type)
+        # middle, label = create_middle('bật thiết bị', include_postfix=True)
+        # post, label_post, type = create_postfix('tắt thiết bị', subject=subject, type=type)
+        # print(prefix + " " + middle + " " + post, annotation + " " + label + " " + label_post, type)
+        print(prefix, annotation)

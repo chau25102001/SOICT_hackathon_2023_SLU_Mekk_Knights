@@ -164,9 +164,9 @@ def random_change_number(sample):
                 if value_type == 0:  # C degree
                     rate = random.uniform(0, 1)
                     if rate < 0.33:  # percentage
-                        new_slot_value = str(random.randint(10, 90)) + "%"
+                        new_slot_value = str(random.randint(10, 300)) + "%"
                     elif rate < 0.88:  # temperature
-                        new_slot_value = str(random.randint(20, 25)) + random.choice([" độ C", " độ", ' '])
+                        new_slot_value = str(random.randint(20, 300)) + random.choice([" độ C", " độ", ' '])
                     else:  # level
                         new_slot_value = str(random.randint(0, 10))
                         if slot == 'target number':
@@ -175,7 +175,7 @@ def random_change_number(sample):
                 elif value_type != 1:
                     rate = random.uniform(0, 1)
                     if rate < 0.5:
-                        new_slot_value = str(random.randint(10, 90)) + "%"
+                        new_slot_value = str(random.randint(10, 300)) + "%"
                     else:
                         new_slot_value = str(random.randint(1, 10))
                         if slot == 'target number':
@@ -469,7 +469,7 @@ def add_duration(sample, times=1):  # add duration slot, before and after comman
                     add = random.uniform(0, 1)
                     if add < rate:
                         new_slot_value = generate_time(time_at=False)  # generate time
-                        prefix = random.choice(["trong vòng ", "trong ", "khoảng ", "trong khoảng "])
+                        prefix = random.choice(["trong vòng ", "trong ", "khoảng ", "trong khoảng ", 'trong suốt '])
                         sentence = sentence[:sentence_end] + " " + prefix + new_slot_value + " " + sentence[
                                                                                                    sentence_end:]  # add before command
                         sentence_annotation = sentence_annotation[
@@ -481,7 +481,7 @@ def add_duration(sample, times=1):  # add duration slot, before and after comman
                     add = random.uniform(0, 1)
                     if add < rate:  # 50 % add
                         new_slot_value = generate_time(time_at=False)  # generate time
-                        prefix = random.choice(["trong vòng ", "trong ", "khoảng ", "trong khoảng "])
+                        prefix = random.choice(["trong vòng ", "trong ", "khoảng ", "trong khoảng ", 'trong suốt '])
                         sentence = sentence[:sentence_end] + " " + prefix + new_slot_value + " " + sentence[
                                                                                                    sentence_end:]  # add before command
                         sentence_annotation = sentence_annotation[
@@ -990,7 +990,7 @@ def random_scene_aug(sample, prob=.7):
 def generate_yes_no(sample, prob=0.7):
     new_sample = sample.copy()
     for i in range(len(sample['sentence'])):
-        intent = sample['intent'][i]
+        intent = random.choice(list(possible_intent_command_mapping.keys()))
         if intent in ['kích hoạt cảnh', 'hủy hoạt cảnh', 'kiểm tra tình trạng thiết bị']:
             continue
         if random.random() < 0.7:
@@ -999,9 +999,13 @@ def generate_yes_no(sample, prob=0.7):
                 continue
         else:
             new_intent = random.choice(neutral_intent)
-        prefix, type, subject, annotation = create_prefix(include_postfix=False)
-        middle, label = create_middle(intent, include_postfix=True)
-        post, label_post, type = create_postfix(new_intent, subject=subject, type=type)
+        include_postfix = random.random() < 0.5
+        prefix, type, subject, annotation = create_prefix(include_postfix=include_postfix)
+        middle, label = create_middle(intent, include_postfix=include_postfix)
+        if include_postfix:
+            post, label_post, type = create_postfix(new_intent, subject=subject, type=type)
+        else:
+            post, label_post, type = '', '', 2
         new_sentence = prefix + " " + middle + " " + post
         new_sentence_annotation = annotation + " " + label + " " + label_post
         if type == 2:
@@ -1053,6 +1057,7 @@ def reverse_intent(sample, prob=.7):
     return reversed_sample
 
 
+
 if __name__ == "__main__":
     from process_data_bio import process_sample
 
@@ -1066,7 +1071,8 @@ if __name__ == "__main__":
     # dataset = dataset.filter(lambda x: x['intent'] == "Bật thiết bị")
     # dataset = dataset.map(add_location, batched=True, load_from_cache_file=False)
     # dataset = dataset.map(strip_spaces, batched=True)
-    #
+    # {'context': ['nóng', 'quá', 'đừng', 'có', 'mở', 'cho', 'anh', 'cái', 'điều', 'hòa', 'ở', 'tầng', 'hầm', 'nhớ'], 'slot_label': ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'B_device', 'I_device', 'O', 'B_location', 'I_location', 'O'], 'intent_label': 14, 'audio_file': '648710731ae6761d9db63ca3.wav', 'original_sentence': 'nóng quá đừng có mở cho anh cái điều hòa ở tầng hầm nhớ', 'original_sentence_annotation': 'nóng quá đừng có mở cho anh cái [ device : điều hòa ] ở [ location : tầng hầm ] nhớ'}
+
     # dataset = dataset.map(partial(add_duration, times=1), batched=True, load_from_cache_file=False)
     # dataset = dataset.map(strip_spaces, batched=True)
     #
@@ -1113,7 +1119,8 @@ if __name__ == "__main__":
     print(count)
 
     dataset = dataset.shuffle()
-    subset = dataset.filter(lambda x: x['intent_label'] == 6)
+
+    subset = dataset.filter(lambda x: 'đừng' in x['context'])
     print(len(subset))
     for i, sample in enumerate(subset):
         print(sample)
