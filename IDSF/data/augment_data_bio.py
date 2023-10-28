@@ -273,18 +273,39 @@ def random_change_location(sample):
     return new_sample
 
 
-def generate_time():
+def generate_time(time_at):
     hour = random.randint(0, 25)
+    hour_unit = "giờ" if time_at else random.choice(["giờ", "tiếng"])
     minute = random.randint(0, 60)
     second = random.randint(0, 60)
     chance = random.uniform(0, 1)
-    if chance < 0.3:  # hour only
-        return_string = str(hour) + " giờ"
-    elif chance < 0.9:
-        return_string = str(hour) + " giờ " + str(minute) + random.choice([" phút", ""])
-    else:
-        return_string = str(hour) + " giờ " + str(minute) + " phút " + str(second) + random.choice([" giây", ''])
-    return return_string
+    if time_at:
+        if chance < 0.3:  # hour only
+            return_string = str(hour) + f" {hour_unit}"
+        elif chance < 0.6:
+            return_string = str(hour) + random.choice([" rưỡi", " giờ rưỡi"])
+        elif chance < 0.9:
+            return_string = str(hour) + f" {hour_unit}" + random.choice([" kém", ""]) \
+                            + f" {str(minute)}" + random.choice([" phút", ""])
+        else:
+            return_string = str(hour) + f" {hour_unit}" + random.choice([" kém", ""]) + f" {str(minute)}" + " phút" \
+                            + f" {str(second)}" + random.choice([" giây", ''])
+        freq_postfix_chance = random.uniform(0, 1)
+        if freq_postfix_chance <= 0.5:
+            return return_string
+        else:
+            return return_string + " " + random.choice(time_repeat_freq)
+    else:  # Duration
+        if chance < 0.3:  # hour only
+            return_string = str(hour) + f" {hour_unit}"
+        elif chance < 0.6:
+            return_string = str(hour) + f" {hour_unit} rưỡi"
+        elif chance < 0.9:
+            return_string = str(hour) + f" {hour_unit}" + f" {str(minute)}" + random.choice([" phút", ""])
+        else:
+            return_string = str(hour) + f" {hour_unit}" + f" {str(minute)}" + " phút" \
+                            + f" {str(second)}" + random.choice([" giây", ''])
+        return return_string
 
 
 def random_change_time_at(sample):
@@ -313,7 +334,7 @@ def random_change_time_at(sample):
         for slot, sentence_start, sentence_end, annotation_start, annotation_end in indices:
             if slot == "time at" and random.uniform(0, 1) < rate:  # found a device slot
 
-                new_slot_value = generate_time()
+                new_slot_value = generate_time(time_at=True)
                 new_sentence = sentence[:sentence_start] + new_slot_value + sentence[sentence_end:]
                 new_sentence_annotation = sentence_annotation[
                                           :annotation_start] + new_slot_value + sentence_annotation[
@@ -354,7 +375,7 @@ def random_change_duration(sample, times=1):
         for t in range(times):
             for slot, sentence_start, sentence_end, annotation_start, annotation_end in indices:
                 if slot == "duration" and random.uniform(0, 1) < rate:  # found a device slot
-                    new_slot_value = generate_time()
+                    new_slot_value = generate_time(time_at=False)
                     new_sentence = sentence[:sentence_start] + new_slot_value + sentence[sentence_end:]
                     new_sentence_annotation = sentence_annotation[
                                               :annotation_start] + new_slot_value + sentence_annotation[
@@ -447,7 +468,7 @@ def add_duration(sample, times=1):  # add duration slot, before and after comman
                 if slot == "command" and not added:  # insert before or after
                     add = random.uniform(0, 1)
                     if add < rate:
-                        new_slot_value = generate_time()  # generate time
+                        new_slot_value = generate_time(time_at=False)  # generate time
                         prefix = random.choice(["trong vòng ", "trong ", "khoảng ", "trong khoảng "])
                         sentence = sentence[:sentence_end] + " " + prefix + new_slot_value + " " + sentence[
                                                                                                    sentence_end:]  # add before command
@@ -459,7 +480,7 @@ def add_duration(sample, times=1):  # add duration slot, before and after comman
                 elif slot == "device" or slot == "target number" or slot == "changing value" or slot == 'location' and not added:
                     add = random.uniform(0, 1)
                     if add < rate:  # 50 % add
-                        new_slot_value = generate_time()  # generate time
+                        new_slot_value = generate_time(time_at=False)  # generate time
                         prefix = random.choice(["trong vòng ", "trong ", "khoảng ", "trong khoảng "])
                         sentence = sentence[:sentence_end] + " " + prefix + new_slot_value + " " + sentence[
                                                                                                    sentence_end:]  # add before command
@@ -594,7 +615,7 @@ def add_time_at(sample):
             if slot == "command" and not added:  # insert before or after
                 add = random.uniform(0, 1)
                 if random.uniform(0, 1) < 0.5 and add < rate:
-                    new_slot_value = generate_time()  # generate time
+                    new_slot_value = generate_time(time_at=True)  # generate time
                     prefix = random.choice(["lúc ", "vào "])
                     sentence = sentence[:sentence_start] + prefix + new_slot_value + " " + sentence[
                                                                                            sentence_start:]  # add before command
@@ -603,7 +624,7 @@ def add_time_at(sample):
                                                                                   annotation_start - 5 - len(slot):]
                     added = True
                 elif add < rate:
-                    new_slot_value = generate_time()  # generate time
+                    new_slot_value = generate_time(time_at=True)  # generate time
                     prefix = random.choice(["lúc ", "vào "])
                     sentence = sentence[:sentence_end] + " " + prefix + new_slot_value + sentence[
                                                                                          sentence_end:]  # add before command
@@ -615,7 +636,7 @@ def add_time_at(sample):
             elif slot == "device" or slot == "target number" or slot == "changing value" or slot == 'location' and not added:
                 add = random.uniform(0, 1)
                 if add < rate:  # 50 % add
-                    new_slot_value = generate_time()  # generate time
+                    new_slot_value = generate_time(time_at=True)  # generate time
                     prefix = random.choice(["lúc ", "vào "])
                     sentence = sentence[:sentence_end] + " " + prefix + new_slot_value + sentence[
                                                                                          sentence_end:]  # add before command
@@ -625,7 +646,7 @@ def add_time_at(sample):
                                           annotation_end + 2:]
                     added = True
             elif slot == 'duration' and not added:
-                new_slot_value = generate_time()  # generate time
+                new_slot_value = generate_time(time_at=True)  # generate time
                 prefix = random.choice(["lúc ", "vào "])
                 sentence = sentence[:sentence_start] + prefix + new_slot_value + " " + sentence[
                                                                                        sentence_start:]  # add before command
@@ -890,7 +911,7 @@ def add_confusing_slot(sample):
                 template = f"[ {slot}" + " : {} ]"
                 prefix = random.choice(possible_confusion_words)
                 current_slot_value = sentence[sentence_start:sentence_end]
-                new_slot_value = generate_time()
+                new_slot_value = generate_time(time_at=slot == 'time at')
                 sentence = sentence[:sentence_end] + " " + prefix + " " + new_slot_value + " " + sentence[sentence_end:]
                 sentence_annotation = sentence_annotation[:annotation_start - 5 - len(
                     slot)] + current_slot_value + " " + prefix + " " + template.format(
@@ -965,42 +986,107 @@ def random_scene_aug(sample, prob=.7):
                         new_sample[k].append(new_intent)
     return new_sample
 
+
 def generate_yes_no(sample, prob=0.7):
     new_sample = sample.copy()
     for i in range(len(sample['sentence'])):
         intent = sample['intent'][i]
+        if intent in ['kích hoạt cảnh', 'hủy hoạt cảnh', 'kiểm tra tình trạng thiết bị']:
+            continue
+        if random.random() < 0.7:
+            new_intent = opposite_intent_mapping[intent]
+            if new_intent is None:
+                continue
+        else:
+            new_intent = random.choice(neutral_intent)
+        prefix, type, subject, annotation = create_prefix(include_postfix=False)
+        middle, label = create_middle(intent, include_postfix=True)
+        post, label_post, type = create_postfix(new_intent, subject=subject, type=type)
+        new_sentence = prefix + " " + middle + " " + post
+        new_sentence_annotation = annotation + " " + label + " " + label_post
+        if type == 2:
+            new_intent = 'kiểm tra tình trạng thiết bị'
+        if random.random() < prob:
+            for k in new_sample.keys():
+                if k not in ['sentence', 'sentence_annotation', 'intent']:
+                    new_sample[k].append(sample[k][i])
+                elif k == 'sentence':
+                    new_sample[k].append(new_sentence)
+                elif k == 'sentence_annotation':
+                    new_sample[k].append(new_sentence_annotation)
+                elif k == 'intent':
+                    new_sample[k].append(new_intent)
+    return new_sample
 
 
+def reverse_intent(sample, prob=.7):
+    reversed_sample = sample.copy()
+    for i in range(len(reversed_sample['sentence'])):
+        intent = reversed_sample['intent'][i]
+        if intent.lower() in reversed_intent_mapping and random.random() < prob:
+            sentence_annotation = reversed_sample['sentence_annotation'][i]
+            sentence = reversed_sample['sentence'][i]
+            indices = find_annotation_indices(sentence, sentence_annotation)
+            reversed_sentence = None
+            reversed_annotation = None
+            for slot, sentence_start, sentence_end, annotation_start, annotation_end in indices:
+                if slot == 'command':
+                    # reversed_sample['intent'][i] = reversed_intent_mapping[intent]
+                    orig_command = sentence[sentence_start:sentence_end]
+                    reversed_command = f"{random.choice(reversed_command_prefix)} {orig_command}"
+
+                    reversed_sentence = sentence[:sentence_start] + reversed_command + sentence[sentence_end:]
+                    reversed_annotation = sentence_annotation[
+                                          :annotation_start - len('[ command : ')] + reversed_command \
+                                          + sentence_annotation[annotation_end + len(' ]'):]
+
+            if reversed_sentence is not None and reversed_annotation is not None:
+                for k in reversed_sample.keys():
+                    if k not in ['sentence', 'sentence_annotation', 'intent']:
+                        reversed_sample[k].append(sample[k][i])
+                    elif k == 'sentence':
+                        reversed_sample[k].append(reversed_sentence)
+                    elif k == 'sentence_annotation':
+                        reversed_sample[k].append(reversed_annotation)
+                    elif k == 'intent':
+                        reversed_sample[k].append(reversed_intent_mapping[intent])
+    return reversed_sample
 
 
 if __name__ == "__main__":
     from process_data_bio import process_sample
 
-    dataset = load_dataset('json', data_files='/home/chaunm/workspace/phobert/data/train_final_20230919.jsonl',
+    dataset = load_dataset('json', data_files='/home/chaunm/workspace/SLU/IDSF/data/train_final_20230919.jsonl',
                            split='train')
     dataset = dataset.map(refine_dataset, batched=True, load_from_cache_file=False)
     dataset = dataset.map(refine_slot_label_changing_value, batched=True, load_from_cache_file=False
                           )
+    dataset = dataset.map(strip_spaces, batched=True)
+
     # dataset = dataset.filter(lambda x: x['intent'] == "Bật thiết bị")
-    dataset = dataset.map(add_location, batched=True, load_from_cache_file=False)
+    # dataset = dataset.map(add_location, batched=True, load_from_cache_file=False)
+    # dataset = dataset.map(strip_spaces, batched=True)
+    #
+    # dataset = dataset.map(partial(add_duration, times=1), batched=True, load_from_cache_file=False)
+    # dataset = dataset.map(strip_spaces, batched=True)
+    #
+    # dataset = dataset.map(random_scene_aug, batched=True, load_from_cache_file=False)
+    # dataset = dataset.map(strip_spaces, batched=True)
+    # dataset = dataset.map(add_confusing_device, batched=True, load_from_cache_file=False)
+    # dataset = dataset.map(strip_spaces, batched=True)
+    # dataset = dataset.map(add_confusing_slot, batched=True)
+    # dataset = dataset.map(strip_spaces, batched=True)
+    #
+    # # dataset = dataset.map(random_scene_aug, batched=True)
+    # dataset = dataset.map(random_change_command, batched=True)
+    # dataset = dataset.map(random_change_number, batched=True)
+    # dataset = dataset.map(random_change_time_at, batched=True)
+    # dataset = dataset.map(random_change_duration, batched=True)
+    # dataset = dataset.map(random_change_location, batched=True)
+    # dataset = dataset.map(generate_yes_no, batched=True)
+    dataset = dataset.map(add_time_at, batched=True)
     dataset = dataset.map(strip_spaces, batched=True)
-
-    dataset = dataset.map(partial(add_duration, times=1), batched=True, load_from_cache_file=False)
-    dataset = dataset.map(strip_spaces, batched=True)
-
-    dataset = dataset.map(random_scene_aug, batched=True, load_from_cache_file=False)
-    dataset = dataset.map(strip_spaces, batched=True)
-    dataset = dataset.map(add_confusing_device, batched=True, load_from_cache_file=False)
-    dataset = dataset.map(strip_spaces, batched=True)
-    dataset = dataset.map(add_confusing_slot, batched=True)
-    dataset = dataset.map(strip_spaces, batched=True)
-
-    # dataset = dataset.map(random_scene_aug, batched=True)
-    dataset = dataset.map(random_change_command, batched=True)
-    dataset = dataset.map(random_change_number, batched=True)
-    dataset = dataset.map(random_change_time_at, batched=True)
-    dataset = dataset.map(random_change_duration, batched=True)
-    dataset = dataset.map(random_change_location, batched=True)
+    dataset = dataset.map(reverse_intent, batched=True)
     dataset = dataset.map(process_sample, batched=True,
                           remove_columns=['id', 'sentence', 'intent', 'sentence_annotation', 'entities',
                                           'file'],
@@ -1027,6 +1113,10 @@ if __name__ == "__main__":
     print(count)
 
     dataset = dataset.shuffle()
-    for i in range(10):
-        print(dataset[i])
-        print("")
+    subset = dataset.filter(lambda x: x['intent_label'] == 6)
+    print(len(subset))
+    for i, sample in enumerate(subset):
+        print(sample)
+        print("\n")
+        if i >= 10:
+            break

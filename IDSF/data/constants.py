@@ -446,7 +446,7 @@ possible_intent_command_mapping = {'bật thiết bị': ['kích hoạt', "khở
                                    'hủy hoạt cảnh': [],
                                    'kiểm tra tình trạng thiết bị': ['check', "chếch", 'xem', 'xem xét', 'xem lại'],
                                    'kích hoạt cảnh': [],
-                                   'mở thiết bị': [],
+                                   'mở thiết bị': ['mở'],
                                    'tăng mức độ của thiết bị': ['nâng', 'làm to', 'cho to', 'vặn to', 'vặn lớn',
                                                                 'cho lớn', 'bật to'],
                                    'tăng nhiệt độ của thiết bị': ['nâng', 'làm ấm', 'làm nóng', 'cho to', 'cho lớn',
@@ -816,7 +816,7 @@ def create_prefix(include_postfix=False):
         else:
             prefix_annotation = "{} {} {}".format(subject, prefix_head,
                                                   linking_verb.split()[0] + f" [ command : {linking_verb_command} ]")
-    elif choice < 0.6:  # xem cho a
+    elif choice < 0.5:  # xem cho a
         type = 2
         subject = random.choice(list_subject)
 
@@ -949,7 +949,7 @@ def create_postfix(intent, subject, type=1):
     label = ''
     if subject is None:
         subject = random.choice(subject_list)
-    if type != 2:
+    if type != 2 and random.random() < 0.7:
         postfix_command = possible_intent_command_mapping[intent]
         command = random.choice(postfix_command)
         one, two, three = (command,
@@ -959,11 +959,12 @@ def create_postfix(intent, subject, type=1):
         label = f"[ command : {one} ] {two} {three}"
     else:
         postfix = ''
+        type = 2
     while "  " in postfix:
         postfix = postfix.replace("  ", " ")
     while "  " in label:
         label = label.replace("  ", " ")
-    return postfix.strip(), label.strip()
+    return postfix.strip(), label.strip(), type
 
 
 opposite_intent_mapping = {'bật thiết bị': 'tắt thiết bị',
@@ -974,18 +975,52 @@ opposite_intent_mapping = {'bật thiết bị': 'tắt thiết bị',
                            'hủy hoạt cảnh': 'kích hoạt cảnh',
                            'kiểm tra tình trạng thiết bị': None,
                            'kích hoạt cảnh': 'hủy hoạt cảnh',
-                           'mở thiết bị': '',
-                           'tăng mức độ của thiết bị': ['nâng', 'làm to', 'cho to', 'vặn to', 'vặn lớn',
-                                                        'cho lớn', 'bật to'],
-                           'tăng nhiệt độ của thiết bị': ['nâng', 'làm ấm', 'làm nóng', 'cho to', 'cho lớn',
-                                                          'bật to'],
-                           'tăng âm lượng của thiết bị': ['nâng', 'vặn to', 'cho to', 'bật to', 'bật to',
-                                                          'bật lớn'],
-                           'tăng độ sáng của thiết bị': ['nâng', 'làm sáng', 'cho sáng', 'bật sáng'],
-                           'tắt thiết bị': ["ngừng", "dừng", 'ngắt', 'sập nguồn', 'ngắt nguồn', 'ngắt điện'],
-                           'đóng thiết bị': ['khóa', 'sập', 'chốt']}
+                           'mở thiết bị': 'đóng thiết bị',
+                           'tăng mức độ của thiết bị': 'giảm mức độ của thiết bị',
+                           'tăng nhiệt độ của thiết bị': 'giảm nhiệt độ của thiết bị',
+                           'tăng âm lượng của thiết bị': 'giảm âm lượng của thiết bị',
+                           'tăng độ sáng của thiết bị': 'giảm độ sáng của thiết bị',
+                           'tắt thiết bị': 'bật thiết bị',
+                           'đóng thiết bị': 'mở thiết bị'}
+neutral_intent = ['bật thiết bị', 'tắt thiết bị', 'mở thiết bị', 'đóng thiết bị']
+time_repeat_freq = [
+    "mỗi ngày",
+    "từng ngày",
+    "hàng ngày",
+    "hằng ngày",
+    "ngày mai",
+    "ngày kia",
+    # "hôm qua",
+    # "hôm kia",
+    # "hôm nọ"
+]
+reversed_intent_mapping = {
+    'bật thiết bị': 'tắt thiết bị',
+    'tắt thiết bị': 'bật thiết bị',
+    'giảm mức độ của thiết bị': 'tăng mức độ của thiết bị',
+    'tăng mức độ của thiết bị': 'giảm mức độ của thiết bị',
+    'giảm nhiệt độ của thiết bị': 'tăng nhiệt độ của thiết bị',
+    'tăng nhiệt độ của thiết bị': 'giảm nhiệt độ của thiết bị',
+    'giảm âm lượng của thiết bị': 'tăng âm lượng của thiết bị',
+    'tăng âm lượng của thiết bị': 'giảm âm lượng của thiết bị',
+    'giảm độ sáng của thiết bị': 'tăng độ sáng của thiết bị',
+    'tăng độ sáng của thiết bị': 'giảm độ sáng của thiết bị',
+    'hủy hoạt cảnh': 'kích hoạt cảnh',
+    'kích hoạt cảnh': 'hủy hoạt cảnh',
+    'mở thiết bị': 'đóng thiết bị',
+    'đóng thiết bị': 'mở thiết bị'
+}
 
-template = "[[xem] [cho abc]] [[cái] {device} [{location}] [còn] {verb adj} [không]?] [[command] [cho abc] [nhé]]"
+reversed_command_prefix = [
+    "đừng",
+    "không được",
+    "đừng có",
+    "đừng có mà",
+    "làm ơn đừng",
+    "chớ",
+    "nghiêm cấm",
+    "cấm"
+]
 if __name__ == "__main__":
     for i in range(20):
         prefix, type, subject, annotation = create_prefix(include_postfix=False)
@@ -993,5 +1028,5 @@ if __name__ == "__main__":
         #     'đóng thiết bị',
         #     subject, type), type)
         middle, label = create_middle('bật thiết bị', include_postfix=True)
-        post, label_post = create_postfix('tắt thiết bị', subject=subject, type=type)
-        print(prefix + " " + middle + " " + post, annotation + " " + label + " " + label_post)
+        post, label_post, type = create_postfix('tắt thiết bị', subject=subject, type=type)
+        print(prefix + " " + middle + " " + post, annotation + " " + label + " " + label_post, type)
