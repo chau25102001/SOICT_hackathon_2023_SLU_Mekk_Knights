@@ -20,7 +20,6 @@ import os
 from tqdm import tqdm
 import librosa
 # Setting seed.
-random.seed(42)
 
 # Constants
 sampling_rate = 16000
@@ -392,16 +391,89 @@ class DataAugmentation():
 
         return aug_data
 
+    def uppitch(self, filepath):
+        '''
+        Performs several data augmentation functions on the same audio.
+        Args:
+            filepath: path to read clean audio file.
+
+        Returns:
+            aug_data: audio data with several data augmentation functions.
+        '''
+        # Read wavefile
+        spec, phase = self.sa.get_spectrogram_phase(filepath)
+        spec_aug = spec
+        aug_data = self.sa.inv_spectrogram(spec_aug, phase)
+
+        pitch_rate = random.uniform(0, self.pitch_range_max)
+        aug_data = self.aa.pitch(aug_data, pitch_rate)
+        return aug_data
+
+    def downpitch(self, filepath):
+        '''
+        Performs several data augmentation functions on the same audio.
+        Args:
+            filepath: path to read clean audio file.
+
+        Returns:
+            aug_data: audio data with several data augmentation functions.
+        '''
+        # Read wavefile
+        spec, phase = self.sa.get_spectrogram_phase(filepath)
+        spec_aug = spec
+        aug_data = self.sa.inv_spectrogram(spec_aug, phase)
+
+        pitch_rate = random.uniform( self.pitch_range_min, 0)
+        aug_data = self.aa.pitch(aug_data, pitch_rate)
+        return aug_data
+
+    def speedup(self, filepath):
+        '''
+        Performs several data augmentation functions on the same audio.
+        Args:
+            filepath: path to read clean audio file.
+
+        Returns:
+            aug_data: audio data with several data augmentation functions.
+        '''
+        # Read wavefile
+        spec, phase = self.sa.get_spectrogram_phase(filepath)
+        spec_aug = spec
+        aug_data = self.sa.inv_spectrogram(spec_aug, phase)
+
+        stretch_rate = random.uniform(0, self.stretch_range_max)
+        aug_data = self.aa.stretch(aug_data, stretch_rate)
+        return aug_data
+
+    def speeddown(self, filepath):
+        '''
+        Performs several data augmentation functions on the same audio.
+        Args:
+            filepath: path to read clean audio file.
+
+        Returns:
+            aug_data: audio data with several data augmentation functions.
+        '''
+        # Read wavefile
+        spec, phase = self.sa.get_spectrogram_phase(filepath)
+        spec_aug = spec
+        aug_data = self.sa.inv_spectrogram(spec_aug, phase)
+
+        stretch_rate = random.uniform(0, self.stretch_range_max)
+        aug_data = self.aa.stretch(aug_data, stretch_rate)
+        return aug_data
+
 def main():
     print('-------- Generating augmented audio files from the training set --------')
     parser = argparse.ArgumentParser()
     parser.add_argument('--base_dir', default='./') 
     parser.add_argument('--input_dir', type=str, help="input directory containing wav files", default = 'speech_modules/data/original_data/Train/')
-    parser.add_argument('--output_dir', type=str,  help="output directory containing augmented files", default = 'speech_modules/data/Train_augment/')
-    parser.add_argument( '--config_path', type=str, help="json file with configurations", default = 'speech_modules/data_augmentation_for_asr/config/moderate.json')
-    parser.add_argument( '--seed', type=int, help="random seed", default = 42)
+    parser.add_argument('--output_dir', type=str,  help="output directory containing augmented files", default = 'speech_modules/data/test_time_augmentation/Train/')
+    parser.add_argument( '--config_path', type=str, help="json file with configurations", default = 'speech_modules/data_augmentation_for_asr/config/light.json')
+    parser.add_argument( '--seed', type=int, help="Random seed", default = 42)
 
     args = parser.parse_args()
+
     random.seed(args.seed)
     np.random.seed(args.seed)
 
@@ -417,15 +489,41 @@ def main():
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
+    uppitch_dir = os.path.join(output_dir,'uppitch/')
+    downpitch_dir = os.path.join(output_dir,'downpitch/')
+    speedup_dir = os.path.join(output_dir,'speedup/')
+    speeddown_dir = os.path.join(output_dir,'speeddown/')
+
+    if not os.path.exists(uppitch_dir):
+        os.makedirs(uppitch_dir)
+
+    if not os.path.exists(downpitch_dir):
+        os.makedirs(downpitch_dir)
+
+    if not os.path.exists(speedup_dir):
+        os.makedirs(speedup_dir)
+
+    if not os.path.exists(speeddown_dir):
+        os.makedirs(speeddown_dir)
+
     all_audio_files = os.listdir(input_dir)
     all_audio_files = [file_name for file_name in all_audio_files if '.wav' in file_name]
+
 
     for file_name in tqdm(all_audio_files):
         file_path = os.path.join(input_dir,file_name)
         # print(file_path)
-        aug_data = da.augment_pipeline(file_path)
+        # aug_data = da.augment_pipeline(file_path)
+        # uppitch_data = da.uppitch(file_path) 
+        # downpitch_data = da.downpitch(file_path)
+        # speedup_data = da.speedup(file_path)
+        speeddown_data = da.speeddown(file_path)
+
         # print(aug_data)
-        da.write_audio(os.path.join(output_dir,file_name), aug_data)
+        # da.write_audio(os.path.join(uppitch_dir,file_name), uppitch_data)
+        # da.write_audio(os.path.join(downpitch_dir,file_name), downpitch_data)
+        # da.write_audio(os.path.join(speedup_dir,file_name), speedup_data)
+        da.write_audio(os.path.join(speeddown_dir,file_name), speeddown_data)
 
 if __name__ == "__main__":
     main()
