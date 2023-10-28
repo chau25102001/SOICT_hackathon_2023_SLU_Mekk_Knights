@@ -171,17 +171,17 @@ if __name__ == "__main__":
     train_split = []
     val_split = []
 
-    # for v in intent_mapping.keys():
-    #     intent_split = dataset.filter(lambda x: x['intent'] == v, load_from_cache_file=False)
-    #     train_len = int(len(intent_split) * 0.9)
-    #     train_partition = intent_split.select(list(range(train_len)))
-    #     val_partition = intent_split.select(list(range(train_len, len(intent_split))))
-    #     train_split.append(train_partition)
-    #     val_split.append(val_partition)
-    #
-    # train_set = datasets.concatenate_datasets(train_split)
-    # val_set = datasets.concatenate_datasets(val_split)
-    train_set = copy.deepcopy(dataset)
+    for v in intent_mapping.keys():
+        intent_split = dataset.filter(lambda x: x['intent'] == v, load_from_cache_file=False)
+        train_len = int(len(intent_split) * 0.9)
+        train_partition = intent_split.select(list(range(train_len)))
+        val_partition = intent_split.select(list(range(train_len, len(intent_split))))
+        train_split.append(train_partition)
+        val_split.append(val_partition)
+
+    train_set = datasets.concatenate_datasets(train_split)
+    val_set = datasets.concatenate_datasets(val_split)
+    # train_set = copy.deepcopy(dataset)
 
     train_set = train_set.map(add_location, batched=True, load_from_cache_file=False)
     train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
@@ -198,14 +198,21 @@ if __name__ == "__main__":
     train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
     train_set = train_set.map(random_change_time_at, batched=True, load_from_cache_file=False)
     train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
-    train_set = train_set.map(replace_with_synonym, batched=True, load_from_cache_file=False)
-    train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
+    # train_set = train_set.map(replace_with_synonym, batched=True, load_from_cache_file=False)
+    # train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
 
     train_set = train_set.map(random_scene_aug, batched=True, load_from_cache_file=False)
     train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
     train_set = train_set.map(add_confusing_device, batched=True, load_from_cache_file=False)
     train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
     train_set = train_set.map(add_confusing_slot, batched=True, load_from_cache_file=False)
+    train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
+
+    train_set = train_set.map(partial(generate_yes_no, prob=0.5), batched=True, load_from_cache_file=False)
+    train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
+    train_set = train_set.map(partial(reverse_intent, prob=0.2), batched=True, load_from_cache_file=False)
+    train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
+    train_set = train_set.map(clean_command, batched=True, load_from_cache_file=False)
     train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
 
     ratio = int(len(train_set) / len(clean_train))
@@ -216,16 +223,16 @@ if __name__ == "__main__":
     processed_train_set = train_set.map(process_sample, batched=True,
                                         remove_columns=train_set.column_names,
                                         load_from_cache_file=False)
-    # processed_val_set = val_set.map(process_sample, batched=True,
-    #                                 remove_columns=val_set.column_names,
-    #                                 load_from_cache_file=False
-    #                                 )
+    processed_val_set = val_set.map(process_sample, batched=True,
+                                    remove_columns=val_set.column_names,
+                                    load_from_cache_file=False
+                                    )
 
     print(len(processed_train_set))
-    # print(len(processed_val_set))
+    print(len(processed_val_set))
     processed_train_set = processed_train_set.filter(lambda x: filter_invalid_annotation(x), load_from_cache_file=False)
-    # processed_val_set = processed_val_set.filter(lambda x: filter_invalid_annotation(x), load_from_cache_file=False)
+    processed_val_set = processed_val_set.filter(lambda x: filter_invalid_annotation(x), load_from_cache_file=False)
     print(len(processed_train_set))
-    # print(len(processed_val_set))
+    print(len(processed_val_set))
     processed_train_set.save_to_disk("data_bio/processed_train")
-    # processed_val_set.save_to_disk("data_bio/processed_val")
+    processed_val_set.save_to_disk("data_bio/processed_val")

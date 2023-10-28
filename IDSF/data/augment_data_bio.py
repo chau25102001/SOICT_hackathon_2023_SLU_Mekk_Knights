@@ -66,6 +66,10 @@ def random_change_device(sample):
                         break
                 if random.uniform(0, 1) < 0.3:
                     new_slot_value = new_slot_value + " số " + str(random.randint(0, 50))
+                if random.uniform(0, 1) < 0.3:
+                    new_slot_value = new_slot_value + " của " + random.choice(human_names)
+                if random.uniform(0, 1) < 0.3:
+                    new_slot_value = new_slot_value + " " + random.choice(directions)
                 new_sentence = sentence[:sentence_start] + new_slot_value + sentence[sentence_end:]
                 new_sentence_annotation = sentence_annotation[:annotation_start] + new_slot_value + sentence_annotation[
                                                                                                     annotation_end:]
@@ -81,25 +85,42 @@ def random_change_device(sample):
 
 def random_change_command(sample):
     new_sample = sample.copy()
-    rate = 0.1
+    rate = 0.3
     for i, _ in enumerate(sample['sentence']):
         intent = sample['intent'][i]
         sentence = sample['sentence'][i]
         sentence_annotation = sample['sentence_annotation'][i]
         indices = find_annotation_indices(sentence, sentence_annotation)
-
+        device = ''
+        for slot, sentence_start, sentence_end, annotation_start, annotation_end in indices:
+            if slot == 'device':
+                device = sentence[sentence_start: sentence_end]
+                break
+        additional_command = []
+        if intent == 'đóng thiết bị':
+            for key in device_keyword_command_mapping_dong_thiet_bi:
+                if key in device:
+                    additional_command = device_keyword_command_mapping_dong_thiet_bi[key]
+                    break
+        elif intent == 'mở thiết bị':
+            for key in device_keyword_command_mapping_mo_thiet_bi:
+                if key in device:
+                    additional_command = device_keyword_command_mapping_mo_thiet_bi[key]
+                    break
+        elif intent == 'bật thiết bị':
+            for key in device_keyword_command_mapping_bat_thiet_bi:
+                if key in device:
+                    additional_command = device_keyword_command_mapping_bat_thiet_bi[key]
         for slot, sentence_start, sentence_end, annotation_start, annotation_end in indices:
             if slot == "command" and random.uniform(0, 1) < rate:  # found a device slot
                 current_slot_value = sentence[sentence_start:sentence_end]
-                command_choices = possible_intent_command_mapping[intent.lower().strip()]
+                command_choices = possible_intent_command_mapping[intent.lower().strip()] + additional_command
                 if ('tăng' in intent or 'giảm' in intent) and ('lên' in sentence or 'xuống' in sentence):
                     command_choices.extend(['chỉnh', 'điều chỉnh'])
                 if len(command_choices) == 0:
                     break
-                while True:  # choose a new device to replace
-                    new_slot_value = random.choice(command_choices)
-                    if new_slot_value != current_slot_value:
-                        break
+                # while True:  # choose a new device to replace
+                new_slot_value = random.choice(command_choices)
                 new_sentence = sentence[:sentence_start] + new_slot_value + sentence[sentence_end:]
                 new_sentence_annotation = sentence_annotation[:annotation_start] + new_slot_value + sentence_annotation[
                                                                                                     annotation_end:]
@@ -170,8 +191,8 @@ def random_change_number(sample):
                     else:  # level
                         new_slot_value = str(random.randint(0, 10))
                         if slot == 'target number':
-                            prefix = random.choice([' mức ', ' nấc ', ' '])
-                            postfix = random.choice([' mức ', ' nấc ', ' '])
+                            prefix = random.choice([' mức ', ' nấc ', ' ', ' lần '])
+                            postfix = random.choice([' mức ', ' nấc ', ' ', ' lần '])
                 elif value_type != 1:
                     rate = random.uniform(0, 1)
                     if rate < 0.5:
@@ -179,13 +200,13 @@ def random_change_number(sample):
                     else:
                         new_slot_value = str(random.randint(1, 10))
                         if slot == 'target number':
-                            prefix = random.choice([' mức ', ' nấc ', ' '])
-                            postfix = random.choice([' mức ', ' nấc ', ' '])
+                            prefix = random.choice([' mức ', ' nấc ', ' ', ' lần '])
+                            postfix = random.choice([' mức ', ' nấc ', ' ', ' lần '])
                 else:  # integer value for level
                     new_slot_value = str(random.randint(1, 10))
                     if slot == 'target number':
-                        prefix = random.choice([' mức ', ' nấc ', ' '])
-                        postfix = random.choice([' mức ', ' nấc ', ' '])
+                        prefix = random.choice([' mức ', ' nấc ', ' ', ' lần '])
+                        postfix = random.choice([' mức ', ' nấc ', ' ', ' lần '])
                 if prefix != ' ' and postfix != ' ':
                     if random.random() < 0.5:
                         postfix = ' '
@@ -255,11 +276,17 @@ def random_change_location(sample):
                 for c in new_slot_value:
                     if c.isdigit():
                         found_digits = True
-                if not found_digits and 'của' not in new_slot_value and 'số' not in new_slot_value and 'tầng' not in new_slot_value and random.uniform(
-                        0, 1) < 0.3:
-                    new_slot_value = new_slot_value + " " + random.choice(['số', 'tầng', '']) + " " + str(
-                        random.randint(0,
-                                       10))
+                if not found_digits and 'của' not in new_slot_value and 'số' not in new_slot_value and 'tầng' not in new_slot_value:
+                    if random.uniform(
+                            0, 1) < 0.3:
+                        new_slot_value = new_slot_value + " " + random.choice(['số', 'tầng', '']) + " " + str(
+                            random.randint(0,
+                                           10))
+                    if random.uniform(0, 1) < 0.3:
+                        new_slot_value = new_slot_value + ' của ' + random.choice(human_names)
+                    if random.uniform(0, 1) < 0.3:
+                        new_slot_value = new_slot_value + " " + random.choice(directions)
+
                 new_sentence = sentence[:sentence_start] + new_slot_value + sentence[sentence_end:]
                 new_sentence_annotation = sentence_annotation[:annotation_start] + new_slot_value + sentence_annotation[
                                                                                                     annotation_end:]
@@ -747,7 +774,7 @@ def add_confusing_device(sample):
         sentence_annotation = sample['sentence_annotation'][i]
         indices = find_annotation_indices(sentence, sentence_annotation)
         added = False
-        rate = 0.05
+        rate = 0.1
         for pos, (slot, sentence_start, sentence_end, annotation_start, annotation_end) in enumerate(indices):
             if slot == "command" and not added and not any([w in sample['sentence'] for w in [' ơi ', ' à ']]):
                 add = random.uniform(0, 1)
@@ -823,7 +850,8 @@ def add_confusing_slot(sample):
         sentence_annotation = sample['sentence_annotation'][i]
         indices = find_annotation_indices(sentence, sentence_annotation)
         added = False
-        rate = 0.05
+        rate = 0.2112410
+
         for slot, sentence_start, sentence_end, annotation_start, annotation_end in indices:
             add = random.uniform(0, 1)
             if slot == 'device' and not added and add < rate:
@@ -1008,6 +1036,8 @@ def generate_yes_no(sample, prob=0.7):
             post, label_post, type = '', '', 2
         new_sentence = prefix + " " + middle + " " + post
         new_sentence_annotation = annotation + " " + label + " " + label_post
+        new_sentence = new_sentence.strip()
+        new_sentence_annotation = new_sentence_annotation.strip()
         if type == 2:
             new_intent = 'kiểm tra tình trạng thiết bị'
         if random.random() < prob:
@@ -1057,6 +1087,34 @@ def reverse_intent(sample, prob=.7):
     return reversed_sample
 
 
+def clean_command(sample):
+    new_sample = sample.copy()
+    for i, _ in enumerate(sample['sentence']):
+        sentence = sample['sentence'][i]
+        sentence_annotation = sample['sentence_annotation'][i]
+        indices = find_annotation_indices(sentence, sentence_annotation)
+        for slot, sentence_start, sentence_end, annotation_start, annotation_end in indices:
+            if slot == 'command':
+                current_slot = sentence[sentence_start:sentence_end]
+                if current_slot in bad_command:
+                    sentence_annotation = sentence_annotation[
+                                          :annotation_start - len('[ command : ')] + current_slot \
+                                          + sentence_annotation[annotation_end + len(' ]'):]
+                    current_slot = ''
+                found_special_command = False
+                for c in special_command:
+                    if c in current_slot:
+                        found_special_command = True
+                        break
+                if found_special_command and len(current_slot.split(" ")) > 1:
+                    offset = len(current_slot.split(" ")[0])
+                    sentence_annotation = sentence_annotation[:annotation_start] + current_slot[
+                                                                                   :offset] + " ]" + current_slot[
+                                                                                                     offset:] + sentence_annotation[
+                                                                                                                annotation_end + 2:]
+        new_sample['sentence_annotation'][i] = sentence_annotation
+    return new_sample
+
 
 if __name__ == "__main__":
     from process_data_bio import process_sample
@@ -1089,10 +1147,12 @@ if __name__ == "__main__":
     # dataset = dataset.map(random_change_time_at, batched=True)
     # dataset = dataset.map(random_change_duration, batched=True)
     # dataset = dataset.map(random_change_location, batched=True)
-    # dataset = dataset.map(generate_yes_no, batched=True)
+    dataset = dataset.map(generate_yes_no, batched=True)
     dataset = dataset.map(add_time_at, batched=True)
     dataset = dataset.map(strip_spaces, batched=True)
     dataset = dataset.map(reverse_intent, batched=True)
+    dataset = dataset.map(strip_spaces, batched=True)
+    dataset = dataset.map(clean_command, batched=True)
     dataset = dataset.map(process_sample, batched=True,
                           remove_columns=['id', 'sentence', 'intent', 'sentence_annotation', 'entities',
                                           'file'],
@@ -1120,7 +1180,7 @@ if __name__ == "__main__":
 
     dataset = dataset.shuffle()
 
-    subset = dataset.filter(lambda x: 'đừng' in x['context'])
+    subset = dataset.filter(lambda x: 'làm nóng' in x['original_sentence'])
     print(len(subset))
     for i, sample in enumerate(subset):
         print(sample)

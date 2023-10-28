@@ -49,7 +49,7 @@ def get_config(train=True):
 
     '''PATH CONFIG'''
     C.data_train_card = "data/data_bio/processed_train"
-    # C.data_val_card = "data/data_bio/processed_val"
+    C.data_val_card = "data/data_bio/processed_val"
     C.data_val_card = None
     C.name = "phobert"
     # C.name = "videberta"

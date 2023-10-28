@@ -123,6 +123,23 @@ location_list = ['hành lang',
                  'phòng khách tầng 1',
                  'phòng ngủ tầng 2',
                  'phòng ăn tầng 3',
+                 "phòng tắm", "phòng khách", "phòng ngủ", "nhà vệ sinh", "nhà bếp", "vườn", "sân",
+                 "phòng áp mái", "nhà để xe", "phòng sưởi nắng", "nhà kho", "phòng vệ sinh",
+                 "phòng chung", "phòng nghỉ", "phòng sinh hoạt chung", "phòng giặt", "phòng giặt ủi",
+                 "phòng đọc", "phòng sách", "phòng đọc sách", "phòng sinh hoạt chung vũ trụ",
+                 "phòng chơi game", "phòng xem phim", "phòng thờ", "phòng thay đồ", "phòng truyền thống",
+                 "phòng truyền thống hướng đông", "phòng tắm", "phòng xông hơi", "phòng tắm xông hơi",
+                 "phòng giặt là hoàng hôn", "phòng giặt là", "phòng bếp", "phòng khách hoa sen",
+                 "phòng chơi game sáng tạo", "phòng nghỉ ngơi", "phòng học", "phòng chứa đồ",
+                 "phòng giải trí", "sân sau", "hiên", "sân trước", "tầng hầm", "gác xép", "gác",
+                 "garage", "phòng gia đình", "phòng ăn", "phòng để đồ", "phòng kho", "kho", "phòng họp",
+                 "ban công", "phòng tắm nắng", "sảnh", "hành lang", "phòng giải lao", "tiền sảnh",
+                 "phòng spa", "phòng để đồ vải", "phòng thiền", "phòng billiard", "phòng bi-a",
+                 "phòng chơi điện tử", "phòng playstation", "phòng spa tại gia", "phòng âm thanh",
+                 "phòng âm nhạc", "phòng truyền thông đa phương tiện", "phòng vẽ", "phòng nghệ thuật",
+                 "phòng làm việc", "văn phòng", "thư viện", "phòng rượu", "hầm rượu", "phòng rượu vang",
+                 "kho rượu", "quầy bar", "phòng thú cưng", "phòng cho thú cưng", "phòng an toàn",
+                 "phòng thiên văn", "phòng quan sát", "đài quan sát", "phòng tiện ích"
                  ]
 
 synonym = {"nhớ": ["nha", "nhe", ""],
@@ -435,7 +452,7 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
 
 possible_intent_command_mapping = {'bật thiết bị': ['kích hoạt', "khởi động", 'mở', 'chạy'],
                                    'giảm mức độ của thiết bị': ['hạ', 'cho thấp', 'cho nhỏ', 'làm nhỏ', 'cho bé',
-                                                                'làm bé', 'vặn nhỏ', 'vặn bé', 'bật bé'],
+                                                                'làm bé', 'vặn nhỏ'],
                                    'giảm nhiệt độ của thiết bị': ['hạ', 'hạ nhiệt', 'giảm nhiệt', 'làm mát', 'làm lạnh',
                                                                   'cho thấp', 'cho bé', 'cho nhỏ', 'chỉnh thấp',
                                                                   'chỉnh nhỏ', 'chỉnh bé', 'bật bé'],
@@ -456,6 +473,16 @@ possible_intent_command_mapping = {'bật thiết bị': ['kích hoạt', "khở
                                    'tăng độ sáng của thiết bị': ['nâng', 'làm sáng', 'cho sáng', 'bật sáng'],
                                    'tắt thiết bị': ["ngừng", "dừng", 'ngắt', 'sập nguồn', 'ngắt nguồn', 'ngắt điện'],
                                    'đóng thiết bị': ['khóa', 'sập', 'chốt']}
+bad_command = ['cho thấp', 'cho nhỏ', 'làm nhỏ', 'cho bé',
+               'làm bé', 'bật bé', 'cho nhỏ', 'làm mát', 'làm lạnh',
+               'cho thấp', 'cho bé', 'cho nhỏ', 'cho nhỏ', 'hạ bé', 'cho bé', 'bật nhỏ',
+               'bật bé', 'làm tối', 'cho tối', 'giảm sáng', 'bớt',
+               'làm mờ', 'cho mờ', 'bật bé', 'bật nhỏ',
+               'làm to', 'cho to', 'làm ấm', 'làm nóng', 'cho to', 'cho lớn',
+               'cho lớn', 'bật to', 'bật lớn', 'làm sáng', 'cho sáng', 'bật sáng',
+               ]
+special_command = ['vặn', 'bật']
+
 need_to_change_prefix = {
     "changing value": ["anh còn", "xuống còn", "còn khoảng", "còn mức", "còn số", "còn tầm", "về", "còn", "đến",
                        "về mức", "lên mức", "xuống mức", "ở mức", "mức số", "mức độ", "đến mức",
@@ -711,7 +738,8 @@ scenes = [
     'riêng tư',
     'thư giãn',
     'tiệc tùng',
-    'đi ngủ',
+    'đi ngủ', 'máy CD', 'máy DVD',
+
     'đi tắm',
     'đi chơi',
     'yên tĩnh',
@@ -1021,6 +1049,45 @@ reversed_command_prefix = [
     "nghiêm cấm",
     "cấm"
 ]
+device_keyword_command_mapping_dong_thiet_bi = {
+    'cửa': ['xếp', 'gấp', 'khép', 'sập'],
+    'rèm': ['xếp', 'gấp', 'khép'],
+    'vòi': ['vặn'],
+}
+device_keyword_command_mapping_mo_thiet_bi = {
+    'lò': ['quay'],
+
+}
+device_keyword_command_mapping_bat_thiet_bi = {
+    'radio': ['phát'],
+    'CD': ['phát'],
+    'DVD': ['phát'],
+    'nhạc': ['phát']
+}
+
+human_names = [
+    "Ái", "An", "Bắc", "Bạc", "Băng", "Bảo", "Bích", "Binh", "Cẩn", "Cát",
+    "Chân", "Châu", "Chi", "Chiến", "Chinh", "Cung", "Cường", "Đài", "Đăng",
+    "Đào", "Đất", "Đe", "Di", "Diễm", "Diệp", "Dĩnh", "Đoan", "Đức", "Dung",
+    "Dương", "Duy", "Duyên", "Giang", "Hà", "Hạ", "Hải", "Hân", "Hằng", "Hạnh",
+    "Hiền", "Hiếu", "Hoàng", "Huân", "Hùng", "Hương", "Hưng", "Huy", "Huyền",
+    "Huỳnh", "Khắc", "Khánh", "Khiêm", "Khoa", "Khuê", "Kiệt", "Kỳ", "Lá",
+    "Lam", "Lâm", "Lan", "Lễ", "Lệ", "Liên", "Linh", "Lộc", "Long", "Lực",
+    "Lý", "Mai", "Mẫn", "Mạnh", "Mậu", "Miên", "Minh", "My", "Nam", "Nga",
+    "Ngà", "Ngân", "Ngiêm", "Ngọc", "Nguyệt", "Nháng", "Nhất", "Nhi", "Nhiên",
+    "Như", "Nhung", "Oanh", "Phú", "Phụng", "Phương", "Phượng", "Quảng", "Quế",
+    "Quý", "Quyên", "Quyền", "Quỳnh", "Sâm", "Sĩ", "Sơn", "Tài", "Tâm", "Tân",
+    "Thạch", "Thăng", "Thắng", "Thanh", "Thảo", "Thiên", "Thịnh", "Thọ", "Thư",
+    "Thục", "Thúy", "Thủy", "Thy", "Tiên", "Tiến", "Toàn", "Tới", "Trác", "Tràm",
+    "Trí", "Trinh", "Trúc", "Trung", "Trường", "Tú", "Tuân", "Tuệ", "Tùng",
+    "Tường", "Uyên", "Vân", "Văn", "Vi", "Viễn", "Vinh", "Vĩnh", "Vũ", "Vương",
+    "Vy", "Xanh", "Xương", "Ý", "Yến"
+]
+
+directions = ['bên trên', 'bên trái', 'bên trên', 'bên dưới', 'phía đông', 'phía tây', 'phía nam', 'phía bắc',
+              'hướng đông', 'hướng tây', 'hướng nam', 'hướng bắc',
+              'bên tay trái', 'bên tay phải'
+              ]
 if __name__ == "__main__":
     for i in range(20):
         prefix, type, subject, annotation = create_prefix(include_postfix=False)
