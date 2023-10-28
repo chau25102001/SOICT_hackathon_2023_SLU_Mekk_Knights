@@ -67,7 +67,7 @@ def get_config(train=True):
     C.total_batch_size = 32
     C.epochs = 5
     C.lr = 5e-5
-    C.weight_decay = 1e-2
+    C.weight_decay = 1e-4
     C.device = "cuda:0"
     C.best_max = True
 

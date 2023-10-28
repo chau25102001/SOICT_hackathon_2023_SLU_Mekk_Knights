@@ -34,8 +34,8 @@ if __name__ == "__main__":
     dataset = dataset.map(strip_spaces, batched=True, load_from_cache_file=False)
     dataset = dataset.map(random_change_time_at, batched=True, load_from_cache_file=False)
     dataset = dataset.map(strip_spaces, batched=True, load_from_cache_file=False)
-    # dataset = dataset.map(replace_with_synonym, batched=True, load_from_cache_file=False)
-    # dataset = dataset.map(strip_spaces, batched=True, load_from_cache_file=False)
+    # train_set = train_set.map(replace_with_synonym, batched=True, load_from_cache_file=False)
+    # train_set = train_set.map(strip_spaces, batched=True, load_from_cache_file=False)
 
     dataset = dataset.map(random_scene_aug, batched=True, load_from_cache_file=False)
     dataset = dataset.map(strip_spaces, batched=True, load_from_cache_file=False)
@@ -49,6 +49,8 @@ if __name__ == "__main__":
     dataset = dataset.map(partial(reverse_intent, prob=0.2), batched=True, load_from_cache_file=False)
     dataset = dataset.map(strip_spaces, batched=True, load_from_cache_file=False)
     dataset = dataset.map(clean_command, batched=True, load_from_cache_file=False)
+    dataset = dataset.map(strip_spaces, batched=True, load_from_cache_file=False)
+    dataset = dataset.map(partial(sequential_task, prob=0.1), batched=True, load_from_cache_file=False)
     dataset = dataset.map(strip_spaces, batched=True, load_from_cache_file=False)
 
     corrupted_dataset = dataset.map(partial(generate_corrupted_dataset, num_augment=2), batched=True,

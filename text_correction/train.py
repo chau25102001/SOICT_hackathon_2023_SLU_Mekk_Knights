@@ -23,7 +23,7 @@ if __name__ == "__main__":
     seed_everything(cfg.seed)
     if args.train_batch_size is not None and isinstance(args.train_batch_size, int):
         cfg.train_batch_size = args.train_batch_size
-        cfg.total_batch_size = args.train_batch_size
+        # cfg.total_batch_size = args.train_batch_size
     if args.val_batch_size is not None and isinstance(args.val_batch_size, int):
         cfg.val_batch_size = args.val_batch_size
     trainer = BartPhoCorrectionTrainer(config=cfg)

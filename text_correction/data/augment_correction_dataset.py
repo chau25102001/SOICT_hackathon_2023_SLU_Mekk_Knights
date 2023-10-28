@@ -1,3 +1,4 @@
+import random
 import typing
 import re
 from datasets import load_dataset
@@ -246,42 +247,80 @@ def augment_word(word):
 PATTERN = r'\d+'
 BASIC = {0: 'không', 1: "một", 2: "hai", 3: "ba", 4: "bốn", 5: "năm", 6: "sáu", 7: "bảy", 8: "tám", 9: "chín",
          10: "mười"}
+random.seed(42)
 
 
 def num_to_text(num: int):
+    all_spellings = []
+    if num <= 100:
+        all_spellings.extend(two_digits_num_to_text(num))
+    else:
+        tram = num // 100
+        two_digit_part = num - tram * 100
+        if two_digit_part == 0:
+            # print(two_digit_part)
+            all_spellings.append(BASIC[tram] + ' trăm')
+        elif two_digit_part < 10:
+            two_digit_part_spellings = two_digits_num_to_text(two_digit_part)
+            for spelling in two_digit_part_spellings:
+
+                all_spellings.append(BASIC[tram] + ' trăm ' + 'linh ' + spelling)
+                all_spellings.append(BASIC[tram] + ' trăm ' + 'lẻ ' + spelling)
+                all_spellings.append(BASIC[tram] + ' lẻ ' + spelling)
+
+                if spelling == 'một':
+                    all_spellings.append(BASIC[tram] + ' trăm ' + 'linh ' + 'mốt')
+                    all_spellings.append(BASIC[tram] + ' trăm ' + 'lẻ ' + 'mốt')
+                    all_spellings.append(BASIC[tram] + ' lẻ ' + 'mốt')
+
+
+        else:
+            two_digit_part_spellings = two_digits_num_to_text(two_digit_part)
+            for spelling in two_digit_part_spellings:
+                all_spellings.append(BASIC[tram] + ' trăm ' + spelling)
+
+    return random.choice(all_spellings)
+
+
+def two_digits_num_to_text(num: int):
+    """Convert number with 2 or"""
+    two_digit_spellings = []
     if num in BASIC:
-        return BASIC[num]
+        two_digit_spellings.append(BASIC[num])
+        return two_digit_spellings
 
     chuc = num // 10
     donvi = num % 10
     if chuc == 1:
-        return "mười " + BASIC[donvi]
+        two_digit_spellings.append("mười " + BASIC[donvi])
+        if donvi == 5:
+            two_digit_spellings.append("mười " + 'lăm')
+
+        return two_digit_spellings
     else:
         first = BASIC[chuc]
-        prob = random.uniform(0, 1)
-        if prob < 0.5:
-            middle = " "
-        else:
-            middle = " mươi "
+        middles = [" ", ' mươi ']
         if donvi == 4:
-            another_prob = random.uniform(0, 1)
-            if another_prob < 0.5:
-                final = "bốn"
-            else:
-                final = "tư"
+            finals = ['bốn', 'tư']
         elif donvi == 1:
-            final = "mốt"
+            finals = ["mốt"]
         elif donvi == 5:
-            final = 'lăm'
+            finals = ['lăm', 'năm']
         elif donvi == 0:
-            if middle == ' mươi ':
-                final = ''
-                middel = ' mươi'
-            else:
-                final = 'mươi'
+            finals = ['mươi']
         else:
-            final = BASIC[donvi]
-        return first + middle + final
+            finals = [BASIC[donvi]]
+
+        for middle in middles:
+            for final in finals:
+                spelling = first + middle + final
+                if 'mươi mươi' in spelling:
+                    spelling = spelling.replace('mươi mươi', 'mươi')
+                # print("Final", final)
+                two_digit_spellings.append(spelling)
+                # print(two_digit_spellings)
+
+        return two_digit_spellings
 
 
 def num_convert(sentence):
@@ -295,6 +334,8 @@ def num_convert(sentence):
 
         num = int(word)
         text_num = num_to_text(num)
+        if num > 100:
+            print(text_num)
         sentence = sentence.replace(word, text_num, 1)
         lech += len(text_num) - len(word)
     sentence = sentence.replace("%", " phần trăm")
@@ -475,9 +516,9 @@ def random_change_number(sample):
                 if value_type == 0:
                     rate = random.uniform(0, 1)
                     if rate < 0.33:  # percentage
-                        new_slot_value = str(random.randint(10, 90)) + "%"
+                        new_slot_value = str(random.randint(10, 200)) + "%"
                     elif rate < 0.88:  # temperature
-                        new_slot_value = str(random.randint(20, 25)) + random.choice([" độ C", " độ"])
+                        new_slot_value = str(random.randint(20, 300)) + random.choice([" độ C", " độ"])
                     else:  # level
                         new_slot_value = str(random.randint(0, 10))
                         if slot == 'target number':
@@ -486,7 +527,7 @@ def random_change_number(sample):
                 elif value_type != 1:
                     rate = random.uniform(0, 1)
                     if rate < 0.5:
-                        new_slot_value = str(random.randint(10, 90)) + "%"
+                        new_slot_value = str(random.randint(10, 200)) + "%"
                     else:
                         new_slot_value = str(random.randint(1, 10))
                         if slot == 'target number':
@@ -1222,7 +1263,7 @@ def add_confusing_slot(sample):
                 template = f"[ {slot}" + " : {} ]"
                 prefix = random.choice(possible_confusion_words)
                 current_slot_value = sentence[sentence_start:sentence_end]
-                new_slot_value = generate_time(time_at=slot=='time at')
+                new_slot_value = generate_time(time_at=slot == 'time at')
                 sentence = sentence[:sentence_end] + " " + prefix + " " + new_slot_value + " " + sentence[sentence_end:]
                 sentence_annotation = sentence_annotation[:annotation_start - 5 - len(
                     slot)] + current_slot_value + " " + prefix + " " + template.format(
@@ -1312,7 +1353,7 @@ def generate_corrupted_dataset(sample, num_augment=2):
                 continue
             sentence_words = sentence.split(" ")
             word_indices = [idx for idx in range(len(sentence_words)) if sentence_words[idx].isalpha()]
-            num_augment = random.uniform(0.15, 0.3)
+            num_augment = random.uniform(0.15, 0.5)
             augment_index = random.sample(word_indices,
                                           k=min(max(int(num_augment * len(word_indices)), 2), len(word_indices)))
             for ai in augment_index:
@@ -1407,6 +1448,9 @@ def reverse_intent(sample, prob=.7):
     return reversed_sample
 
 
+sequential_conjunction = ['rồi', 'sau đó', 'sau đó thì', 'và rồi', 'sau đấy', 'tiếp theo', 'tiếp đó thì']
+
+
 def generate_yes_no(sample, prob=0.7):
     new_sample = sample.copy()
     for i in range(len(sample['sentence'])):
@@ -1443,3 +1487,46 @@ def generate_yes_no(sample, prob=0.7):
                 elif k == 'intent':
                     new_sample[k].append(new_intent)
     return new_sample
+
+
+def sequential_task(samples, prob=0.5):
+    new_samples = samples.copy()
+
+    for idx in range(len(samples['sentence'])):
+        reversed_intent = opposite_intent_mapping[new_samples['intent'][idx]]
+        if reversed_intent is None:
+            continue
+
+        try:
+            reversed_command = random.choice(possible_intent_command_mapping[reversed_intent])
+        except IndexError:
+            continue
+        sentence = new_samples['sentence'][idx]
+        sentence_annotation = new_samples['sentence_annotation'][idx]
+        # print(sentence, sentence_annotation)
+        indices = find_annotation_indices(sentence, sentence_annotation)
+        device = ''
+        for slot, sentence_start, sentence_end, annotation_start, annotation_end in indices:
+            if slot == 'device':
+                device = sentence[sentence_start: sentence_end]
+                break
+
+        conjunc = f"{random.choice(sequential_conjunction)}"
+        conjunc_postfix = random.choice(middle_postfix_no_commad)
+        new_sentence = sentence + " " + conjunc + ' ' + reversed_command + " " + device + " " + conjunc_postfix
+
+        if device.strip() != "":
+            device_annotation = f'[ device : {device} ]'
+        else:
+            device_annotation = ''
+        new_sentence_annotation = sentence_annotation + " " + conjunc + " " + reversed_command + " " + device_annotation + " " + conjunc_postfix
+        # print(new_sentence_annotation, new_sentence)
+        if random.random() < prob:
+            for k in new_samples.keys():
+                if k not in ['sentence', 'sentence_annotation']:
+                    new_samples[k].append(samples[k][idx])
+                elif k == 'sentence':
+                    new_samples[k].append(new_sentence)
+                elif k == 'sentence_annotation':
+                    new_samples[k].append(new_sentence_annotation)
+    return new_samples

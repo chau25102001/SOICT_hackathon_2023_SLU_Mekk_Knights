@@ -141,39 +141,6 @@ location_list = ['hành lang',
                  "kho rượu", "quầy bar", "phòng thú cưng", "phòng cho thú cưng", "phòng an toàn",
                  "phòng thiên văn", "phòng quan sát", "đài quan sát", "phòng tiện ích"
                  ]
-device_keyword_command_mapping_dong_thiet_bi = {
-    'cửa': ['xếp', 'gấp', 'khép', 'sập'],
-    'rèm': ['xếp', 'gấp', 'khép'],
-    'vòi': ['vặn'],
-}
-device_keyword_command_mapping_mo_thiet_bi = {
-    'lò': ['quay'],
-
-}
-device_keyword_command_mapping_bat_thiet_bi = {
-    'radio': ['phát'],
-    'CD': ['phát'],
-    'DVD': ['phát'],
-    'nhạc': ['phát']
-}
-human_names = [
-    "Ái", "An", "Bắc", "Bạc", "Băng", "Bảo", "Bích", "Binh", "Cẩn", "Cát",
-    "Chân", "Châu", "Chi", "Chiến", "Chinh", "Cung", "Cường", "Đài", "Đăng",
-    "Đào", "Đất", "Đe", "Di", "Diễm", "Diệp", "Dĩnh", "Đoan", "Đức", "Dung",
-    "Dương", "Duy", "Duyên", "Giang", "Hà", "Hạ", "Hải", "Hân", "Hằng", "Hạnh",
-    "Hiền", "Hiếu", "Hoàng", "Huân", "Hùng", "Hương", "Hưng", "Huy", "Huyền",
-    "Huỳnh", "Khắc", "Khánh", "Khiêm", "Khoa", "Khuê", "Kiệt", "Kỳ", "Lá",
-    "Lam", "Lâm", "Lan", "Lễ", "Lệ", "Liên", "Linh", "Lộc", "Long", "Lực",
-    "Lý", "Mai", "Mẫn", "Mạnh", "Mậu", "Miên", "Minh", "My", "Nam", "Nga",
-    "Ngà", "Ngân", "Ngiêm", "Ngọc", "Nguyệt", "Nháng", "Nhất", "Nhi", "Nhiên",
-    "Như", "Nhung", "Oanh", "Phú", "Phụng", "Phương", "Phượng", "Quảng", "Quế",
-    "Quý", "Quyên", "Quyền", "Quỳnh", "Sâm", "Sĩ", "Sơn", "Tài", "Tâm", "Tân",
-    "Thạch", "Thăng", "Thắng", "Thanh", "Thảo", "Thiên", "Thịnh", "Thọ", "Thư",
-    "Thục", "Thúy", "Thủy", "Thy", "Tiên", "Tiến", "Toàn", "Tới", "Trác", "Tràm",
-    "Trí", "Trinh", "Trúc", "Trung", "Trường", "Tú", "Tuân", "Tuệ", "Tùng",
-    "Tường", "Uyên", "Vân", "Văn", "Vi", "Viễn", "Vinh", "Vĩnh", "Vũ", "Vương",
-    "Vy", "Xanh", "Xương", "Ý", "Yến"
-]
 
 synonym = {"nhớ": ["nha", "nhe", ""],
            "nhá": ["nha", "nhe", ""],
@@ -219,10 +186,20 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                    'đèn cổng', 'đèn học', 'đèn led', 'đèn làm việc',
                                                    'đèn ngủ', 'đèn sưởi', 'đèn thả', 'đèn tranh',
                                                    'đèn trụ cổng', 'đèn tuýp', 'đèn tường', 'đèn âm trần',
-                                                   'đèn ốp tường'],
+                                                   'đèn ốp tường', 'lò sưởi', 'lò nướng',
+                                                   'lò vi sóng',
+                                                   'máy nghe nhạc', 'máy phát nhạc', 'radio', 'máy chơi đĩa', 'máy CD',
+                                                   'máy DVD',
+                                                   'lò sưởi', 'lò nướng bánh mỳ', 'lò nướng bánh', 'lò vi sóng',
+                                                   'lò vi ba',
+                                                   'máy tính bảng', 'điện thoại thông minh', 'ipad', 'iphone'],
                                   'giảm mức độ của thiết bị': ['quạt hút mùi', 'quạt treo tường', 'quạt thông gió',
                                                                'quạt trần', 'quạt', 'quạt hơi nước', 'quạt điện',
-                                                               'quạt gió',
+                                                               'quạt gió', 'quạt đứng', 'quạt bàn', 'quạt máy',
+                                                               'quạt hơi nước', 'quạt thông minh', 'quạt mini',
+                                                               'quạt phun sương', 'quạt bếp', 'quạt tạo ẩm',
+                                                               'phạt phun nước', 'quạt hút gió', 'quạt hút khí',
+                                                               'quạt làm mát',
                                                                'vòi hoa sen', 'vòi sen', 'vòi tưới', 'vòi tưới nước',
                                                                'vòi nước', 'vòi tưới', 'vòi phun', 'vòi phun nước', ],
                                   'giảm nhiệt độ của thiết bị': ['máy lạnh', 'điều hòa', 'máy điều hòa', 'máy sưởi',
@@ -230,10 +207,23 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                                  'điều hòa nhiệt độ', 'máy làm mát', 'lò vi sóng',
                                                                  'bình nóng lạnh', 'lò sưởi', 'lò nướng', 'bếp',
                                                                  'bếp điện',
-                                                                 'bếp lửa', 'bếp từ', 'bếp ga'],
+                                                                 'bếp lửa', 'bếp từ', 'bếp ga', 'bộ điều hòa không khí',
+                                                                 'nồi cơm điện', 'ấm đun nước', 'ấm điện',
+                                                                 'ấm siêu tốc', 'máy pha cà phê',
+                                                                 'bình đun nước', 'bình nhiệt', 'nồi hấp', 'nồi hơi',
+                                                                 'nồi điện', 'nhiệt kế', 'nhiệt kế hồng ngoại',
+                                                                 'lò vi ba', 'nồi hâm nóng', 'máy làm lạnh',
+                                                                 'máy làm đá', 'máy pha cà phê', 'ấm đun nước điện tử',
+                                                                 'máy làm bánh', 'lò nướng bánh'
+                                                                 ],
                                   'giảm âm lượng của thiết bị': ["radio", "ti vi", "loa", "loa ti vi", "loa laptop",
                                                                  "loa máy tính", "loa thùng", "máy phát nhạc",
-                                                                 "máy chơi nhạc", "cát xét"],
+                                                                 "máy chơi nhạc", "cát xét", 'đầu đĩa', 'đầu chơi đĩa',
+                                                                 'máy CD', 'máy DVD',
+                                                                 'tai nghe', 'loa dàn', 'loa bluetooth', 'đầu đĩa CD',
+                                                                 'đầu DVD', 'máy tính', 'máy tính bảng',
+                                                                 'điện thoại thông minh', 'điện thoại', 'stereo',
+                                                                 'máy ghi âm', 'dàn karraoke'],
                                   'giảm độ sáng của thiết bị': ['bóng', 'bóng chùm', 'bóng compact',
                                                                 'bóng hắt', 'bóng làm việc', 'bóng ngủ',
                                                                 'bóng sân', 'bóng thả', 'bóng treo tường',
@@ -253,7 +243,12 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                                 'đèn led', 'đèn làm việc', 'đèn rủ',
                                                                 'đèn sợi đốt', 'đèn thả',
                                                                 'đèn tròn', 'đèn trụ cổng',
-                                                                'đèn tuýp', 'đèn tường', 'đèn âm trần'],
+                                                                'đèn tuýp', 'đèn tường', 'đèn âm trần',
+                                                                'đèn hẻm', 'đèn nền', 'đèn thông minh',
+                                                                'đèn năng lượng mặt trời', 'màn hình máy tính',
+                                                                'màn hình điện thoại',
+                                                                'màn hình máy tính bảng', 'màn hình', 'đèn sân vườn',
+                                                                'đèn đọc sách'],
                                   'hủy hoạt cảnh': [],
                                   'kiểm tra tình trạng thiết bị': ['bình nóng lạnh',
                                                                    'bóng chùm', 'bóng compact', 'bóng huỳnh quang',
@@ -267,7 +262,7 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                                    'bóng đèn tròn',
                                                                    'bóng đèn tuýp', 'bóng đèn đứng', 'bóng đèn ốp trần',
                                                                    'bếp', 'bếp điện', 'bếp ga', 'camera',
-                                                                   'camera giám sát'
+                                                                   'camera giám sát',
                                                                    'laptop', 'PC', 'loa',
                                                                    'loa ti vi', 'loa máy tính', 'lò nướng',
                                                                    'lò vi sóng',
@@ -295,7 +290,10 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                                    'đèn trụ cổng', 'đèn tuýp', 'đèn tường',
                                                                    'đèn âm trần',
                                                                    'đèn ốp tường', 'đồng hồ', 'đồng hồ treo tường',
-                                                                   'đồng hồ điện'],
+                                                                   'đồng hồ điện', 'điện thoại',
+                                                                   'điện thoại thông minh',
+                                                                   'máy tính bảng', 'iphone', 'ipad', 'máy phát nhạc',
+                                                                   'máy chơi nhạc', 'đầu CD', 'đầu DVD'],
                                   'kích hoạt cảnh': [],
                                   'mở thiết bị': ['bình nóng lạnh',
                                                   'bóng chùm', 'bóng compact', 'bóng huỳnh quang', 'bóng hắt',
@@ -310,13 +308,13 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                   'loa ti vi', 'loa máy tính', 'lò nướng', 'lò vi sóng',
                                                   'lò sưởi',
                                                   'máy chơi game', 'máy fax', 'máy giặt', 'máy hút bụi', 'máy hút mùi',
-                                                  'máy in', 'máy lạnh', 'máy mát xa', 'máy nghe nhạc',
+                                                  'máy in', 'máy lạnh', 'máy mát xa',
                                                   'máy pha cafe', 'máy rửa bát', 'máy sưởi',
                                                   'máy tính', 'máy tính xách tay',
                                                   'quạt treo tường', 'quạt hút mùi', 'quạt thông gió',
                                                   'quạt trần', 'quạt', 'quạt hơi nước', 'quạt điện',
                                                   'quạt gió',
-                                                  'tủ lạnh', 'tủ đá', 'tủ đông',
+                                                  'tủ lạnh', 'tủ đá', 'tủ đông', 'tủ đồ',
                                                   'van tưới',
                                                   'vòi tưới', 'vòi hoa sen', 'vòi sen', 'vòi tưới nước',
                                                   'vòi nước', 'vòi phun', 'vòi phun nước',
@@ -327,23 +325,45 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                   'đèn cổng', 'đèn học', 'đèn led', 'đèn làm việc',
                                                   'đèn ngủ', 'đèn sưởi', 'đèn thả', 'đèn tranh',
                                                   'đèn trụ cổng', 'đèn tuýp', 'đèn tường', 'đèn âm trần',
-                                                  'đèn ốp tường'],
+                                                  'đèn ốp tường', 'rèm cửa', 'rèm cửa sổ', 'cửa cuốn', 'cửa sổ',
+                                                  'cửa cổng', 'cổng', 'cửa ra vào', 'cửa', 'cổng ra vào', 'rèm ngủ',
+                                                  'laptop', 'máy tính bảng', 'cửa tủ', 'rèm', 'màn ngủ', 'màn cuốn',
+                                                  'màn cửa', 'radio', 'stereo', 'rèm cửa', 'rèm cửa sổ',
+                                                  'mành cửa', 'mành cuốn', 'camera', 'lò nướng',
+                                                  'lò vi sóng',
+                                                  'lò sưởi', ],
                                   'tăng mức độ của thiết bị': ['quạt hút mùi', 'quạt treo tường', 'quạt thông gió',
                                                                'quạt trần', 'quạt', 'quạt hơi nước', 'quạt điện',
-                                                               'quạt gió',
+                                                               'quạt gió', 'quạt đứng', 'quạt bàn', 'quạt máy',
+                                                               'quạt hơi nước', 'quạt thông minh', 'quạt mini',
+                                                               'quạt phun sương', 'quạt bếp', 'quạt tạo ẩm',
+                                                               'phạt phun nước', 'quạt hút gió', 'quạt hút khí',
+                                                               'quạt làm mát',
                                                                'vòi hoa sen', 'vòi sen', 'vòi tưới', 'vòi tưới nước',
-                                                               'vòi nước', 'vòi tưới', 'vòi phun', 'vòi phun nước',
-                                                               'máy hút ẩm', 'van tưới'],
-                                  'tăng nhiệt độ của thiết bị': ['lò vi sóng', 'bình nóng lạnh', 'lò sưởi', 'lò nướng',
-                                                                 'máy lạnh', 'điều hòa', 'máy điều hòa', 'máy sưởi',
-                                                                 'đèn sưởi', 'đèn làm ấm',
-                                                                 'điều hòa nhiệt độ', 'máy làm mát', 'bếp', 'bếp điện',
-                                                                 'bếp lửa', 'bếp từ', 'bếp ga'
+                                                               'vòi nước', 'vòi tưới', 'vòi phun', 'vòi phun nước', ],
+                                  'tăng nhiệt độ của thiết bị': ['máy lạnh', 'điều hòa', 'máy điều hòa', 'máy sưởi',
+                                                                 'lò sười', 'đèn sưởi', 'đèn làm ấm',
+                                                                 'điều hòa nhiệt độ', 'máy làm mát', 'lò vi sóng',
+                                                                 'bình nóng lạnh', 'lò sưởi', 'lò nướng', 'bếp',
+                                                                 'bếp điện',
+                                                                 'bếp lửa', 'bếp từ', 'bếp ga', 'bộ điều hòa không khí',
+                                                                 'nồi cơm điện', 'ấm đun nước', 'ấm điện',
+                                                                 'ấm siêu tốc', 'máy pha cà phê',
+                                                                 'bình đun nước', 'bình nhiệt', 'nồi hấp', 'nồi hơi',
+                                                                 'nồi điện', 'nhiệt kế', 'nhiệt kế hồng ngoại',
+                                                                 'lò vi ba', 'nồi hâm nóng', 'máy làm lạnh',
+                                                                 'máy làm đá', 'máy pha cà phê', 'ấm đun nước điện tử',
+                                                                 'máy làm bánh', 'lò nướng bánh'
                                                                  ],
                                   'tăng âm lượng của thiết bị': ["radio", "ti vi", "loa", "loa ti vi", "loa laptop",
                                                                  "loa máy tính", "loa thùng", "máy phát nhạc",
-                                                                 "máy chơi nhạc", "cát xét", 'máy nghe nhạc', 'máy hát',
-                                                                 'đàn', ],
+                                                                 "máy chơi nhạc", "cát xét", 'đầu đĩa', 'đầu chơi đĩa',
+                                                                 'máy CD', 'máy DVD',
+                                                                 'tai nghe', 'loa dàn', 'loa bluetooth', 'đầu đĩa CD',
+                                                                 'đầu DVD', 'máy tính', 'máy tính bảng',
+                                                                 'điện thoại thông minh', 'điện thoại', 'stereo',
+                                                                 'máy ghi âm', 'dàn karraoke'],
+
                                   'tăng độ sáng của thiết bị': ['bóng', 'bóng chùm', 'bóng compact',
                                                                 'bóng hắt', 'bóng làm việc', 'bóng ngủ',
                                                                 'bóng sân', 'bóng thả', 'bóng treo tường',
@@ -363,7 +383,12 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                                 'đèn led', 'đèn làm việc', 'đèn rủ',
                                                                 'đèn sợi đốt', 'đèn thả',
                                                                 'đèn tròn', 'đèn trụ cổng',
-                                                                'đèn tuýp', 'đèn tường', 'đèn âm trần'],
+                                                                'đèn tuýp', 'đèn tường', 'đèn âm trần',
+                                                                'đèn hẻm', 'đèn nền', 'đèn thông minh',
+                                                                'đèn năng lượng mặt trời', 'màn hình máy tính',
+                                                                'màn hình điện thoại',
+                                                                'màn hình máy tính bảng', 'màn hình', 'đèn sân vườn',
+                                                                'đèn đọc sách'],
                                   'tắt thiết bị': ['bình nóng lạnh',
                                                    'bóng chùm', 'bóng compact', 'bóng huỳnh quang', 'bóng hắt',
                                                    'bóng ngủ',
@@ -372,8 +397,8 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                    'bóng đèn ngủ', 'bóng đèn sưởi', 'bóng đèn treo tường',
                                                    'bóng đèn tròn',
                                                    'bóng đèn tuýp', 'bóng đèn đứng', 'bóng đèn ốp trần',
-                                                   'bếp', 'bếp điện', 'bếp ga', 'camera', 'camera giám sát'
-                                                                                          'laptop', 'PC', 'loa',
+                                                   'bếp', 'bếp điện', 'bếp ga', 'camera', 'camera giám sát',
+                                                   'laptop', 'PC', 'loa',
                                                    'loa ti vi', 'loa máy tính', 'lò nướng', 'lò vi sóng',
                                                    'lò sưởi',
                                                    'máy chơi game', 'máy fax', 'máy giặt', 'máy hút bụi', 'máy hút mùi',
@@ -394,7 +419,9 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                    'đèn cổng', 'đèn học', 'đèn led', 'đèn làm việc',
                                                    'đèn ngủ', 'đèn sưởi', 'đèn thả', 'đèn tranh',
                                                    'đèn trụ cổng', 'đèn tuýp', 'đèn tường', 'đèn âm trần',
-                                                   'đèn ốp tường'],
+                                                   'đèn ốp tường', 'máy nghe nhạc', 'máy phát nhạc', 'radio',
+                                                   'máy chơi đĩa', 'máy CD',
+                                                   'máy DVD', ],
                                   'đóng thiết bị': ['bình nóng lạnh',
                                                     'bóng chùm', 'bóng compact', 'bóng huỳnh quang', 'bóng hắt',
                                                     'bóng ngủ',
@@ -415,7 +442,7 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                     'quạt treo tường', 'quạt hút mùi', 'quạt thông gió',
                                                     'quạt trần', 'quạt', 'quạt hơi nước', 'quạt điện',
                                                     'quạt gió',
-                                                    'tủ lạnh', 'tủ đá', 'tủ đông',
+                                                    'tủ lạnh', 'tủ đá', 'tủ đông', 'tủ đồ',
                                                     'van tưới',
                                                     'vòi tưới', 'vòi hoa sen', 'vòi sen', 'vòi tưới nước',
                                                     'vòi nước', 'vòi phun', 'vòi phun nước',
@@ -426,13 +453,18 @@ possible_intent_device_mapping = {'bật thiết bị': ['bình nóng lạnh',
                                                     'đèn cổng', 'đèn học', 'đèn led', 'đèn làm việc',
                                                     'đèn ngủ', 'đèn sưởi', 'đèn thả', 'đèn tranh',
                                                     'đèn trụ cổng', 'đèn tuýp', 'đèn tường', 'đèn âm trần',
-                                                    'đèn ốp tường']}
+                                                    'đèn ốp tường', 'rèm cửa', 'rèm cửa sổ', 'cửa cuốn', 'cửa sổ',
+                                                    'cửa cổng', 'cổng', 'cửa ra vào', 'cửa', 'cổng ra vào', 'rèm ngủ',
+                                                    'laptop', 'máy tính bảng', 'cửa tủ', 'rèm', 'màn ngủ', 'màn cuốn',
+                                                    'màn cửa', 'radio', 'stereo', 'rèm cửa', 'rèm cửa sổ',
+                                                    'mành cửa', 'mành cuốn', 'camera']}
+
 possible_intent_command_mapping = {'bật thiết bị': ['kích hoạt', "khởi động", 'mở', 'chạy'],
                                    'giảm mức độ của thiết bị': ['hạ', 'cho thấp', 'cho nhỏ', 'làm nhỏ', 'cho bé',
-                                                                'làm bé', 'vặn nhỏ'],
+                                                                'làm bé', 'vặn nhỏ', 'đưa xuống'],
                                    'giảm nhiệt độ của thiết bị': ['hạ', 'hạ nhiệt', 'giảm nhiệt', 'làm mát', 'làm lạnh',
                                                                   'cho thấp', 'cho bé', 'cho nhỏ', 'chỉnh thấp',
-                                                                  'chỉnh nhỏ', 'chỉnh bé', 'bật bé'],
+                                                                  'chỉnh nhỏ', 'chỉnh bé', 'bật bé', 'đưa lên'],
                                    'giảm âm lượng của thiết bị': ['hạ', 'cho nhỏ', 'hạ bé', 'cho bé', 'bớt', 'bật nhỏ',
                                                                   'bật bé'],
                                    'giảm độ sáng của thiết bị': ['hạ', 'làm tối', 'cho tối', 'giảm sáng', 'bớt',
@@ -442,11 +474,11 @@ possible_intent_command_mapping = {'bật thiết bị': ['kích hoạt', "khở
                                    'kích hoạt cảnh': [],
                                    'mở thiết bị': ['mở'],
                                    'tăng mức độ của thiết bị': ['nâng', 'làm to', 'cho to', 'vặn to', 'vặn lớn',
-                                                                'cho lớn', 'bật to'],
+                                                                'cho lớn', 'bật to', 'đưa lên'],
                                    'tăng nhiệt độ của thiết bị': ['nâng', 'làm ấm', 'làm nóng', 'cho to', 'cho lớn',
-                                                                  'bật to'],
+                                                                  'bật to', 'đưa lên'],
                                    'tăng âm lượng của thiết bị': ['nâng', 'vặn to', 'cho to', 'bật to', 'bật to',
-                                                                  'bật lớn'],
+                                                                  'bật lớn', 'đưa lên'],
                                    'tăng độ sáng của thiết bị': ['nâng', 'làm sáng', 'cho sáng', 'bật sáng'],
                                    'tắt thiết bị': ["ngừng", "dừng", 'ngắt', 'sập nguồn', 'ngắt nguồn', 'ngắt điện'],
                                    'đóng thiết bị': ['khóa', 'sập', 'chốt']}
@@ -457,8 +489,10 @@ bad_command = ['cho thấp', 'cho nhỏ', 'làm nhỏ', 'cho bé',
                'làm mờ', 'cho mờ', 'bật bé', 'bật nhỏ',
                'làm to', 'cho to', 'làm ấm', 'làm nóng', 'cho to', 'cho lớn',
                'cho lớn', 'bật to', 'bật lớn', 'làm sáng', 'cho sáng', 'bật sáng',
+               'đưa lên', 'đưa lên'
                ]
 special_command = ['vặn', 'bật']
+
 need_to_change_prefix = {
     "changing value": ["anh còn", "xuống còn", "còn khoảng", "còn mức", "còn số", "còn tầm", "về", "còn", "đến",
                        "về mức", "lên mức", "xuống mức", "ở mức", "mức số", "mức độ", "đến mức",
@@ -703,7 +737,7 @@ text_num_mapping = {'ba': 3,
 
 possible_confusing_device = ['máy tính', 'nhà thông minh', 'trợ lý ảo', 'điện thoại thông minh', 'điện thoại', 'trợ lý',
                              'AI', 'trí tuệ nhân tạo', 'robot', 'người máy']
-possible_verbal_words = ['ơi', 'à', 'ây', 'êi', 'này', 'nè', '']
+possible_verbal_words = ['ơi', 'à', 'ây', 'êi', 'này', 'nè']
 
 possible_confusion_words = ["à", "à mà thôi", "à thôi", "à nhầm", "nhầm", "à đâu", "à quên"]
 
@@ -714,7 +748,8 @@ scenes = [
     'riêng tư',
     'thư giãn',
     'tiệc tùng',
-    'đi ngủ',
+    'đi ngủ', 'máy CD', 'máy DVD',
+
     'đi tắm',
     'đi chơi',
     'yên tĩnh',
@@ -775,62 +810,19 @@ end_words = [
     "",
 ]
 
-time_repeat_freq = [
-    "mỗi ngày",
-    "từng ngày",
-    "hàng ngày",
-    "hằng ngày",
-    "ngày mai",
-    "ngày kia",
-    # "hôm qua",
-    # "hôm kia",
-    # "hôm nọ"
-]
 
-reversed_intent_mapping = {
-    'bật thiết bị': 'tắt thiết bị',
-    'tắt thiết bị': 'bật thiết bị',
-    'giảm mức độ của thiết bị': 'tăng mức độ của thiết bị',
-    'tăng mức độ của thiết bị': 'giảm mức độ của thiết bị',
-    'giảm nhiệt độ của thiết bị': 'tăng nhiệt độ của thiết bị',
-    'tăng nhiệt độ của thiết bị': 'giảm nhiệt độ của thiết bị',
-    'giảm âm lượng của thiết bị': 'tăng âm lượng của thiết bị',
-    'tăng âm lượng của thiết bị': 'giảm âm lượng của thiết bị',
-    'giảm độ sáng của thiết bị': 'tăng độ sáng của thiết bị',
-    'tăng độ sáng của thiết bị': 'giảm độ sáng của thiết bị',
-    'hủy hoạt cảnh': 'kích hoạt cảnh',
-    'kích hoạt cảnh': 'hủy hoạt cảnh',
-    'mở thiết bị': 'đóng thiết bị',
-    'đóng thiết bị': 'mở thiết bị'
+def generate_sentence():
+    template = "{} {} {} {}"
+    first_slot = random.choice(subject_list)
+    second_slot = random.choice(support_words)
+    third_slot = random.choice(scenes)
+    fourth_slot = random.choice(end_words)
+    return template.format(first_slot, second_slot, third_slot, fourth_slot)
+
+
+intent_rate_mapping = {
+
 }
-
-reversed_command_prefix = [
-    "đừng",
-    "không được",
-    "đừng có",
-    "đừng có mà",
-    "làm ơn đừng",
-    "chớ",
-    "nghiêm cấm",
-    "cấm"
-]
-
-opposite_intent_mapping = {'bật thiết bị': 'tắt thiết bị',
-                           'giảm mức độ của thiết bị': 'tăng mức độ của thiết bị',
-                           'giảm nhiệt độ của thiết bị': 'tăng nhiệt độ của thiết bị',
-                           'giảm âm lượng của thiết bị': 'tăng âm lượng của thiết bị',
-                           'giảm độ sáng của thiết bị': 'tăng độ sáng của thiết bị',
-                           'hủy hoạt cảnh': 'kích hoạt cảnh',
-                           'kiểm tra tình trạng thiết bị': None,
-                           'kích hoạt cảnh': 'hủy hoạt cảnh',
-                           'mở thiết bị': 'đóng thiết bị',
-                           'tăng mức độ của thiết bị': 'giảm mức độ của thiết bị',
-                           'tăng nhiệt độ của thiết bị': 'giảm nhiệt độ của thiết bị',
-                           'tăng âm lượng của thiết bị': 'giảm âm lượng của thiết bị',
-                           'tăng độ sáng của thiết bị': 'giảm độ sáng của thiết bị',
-                           'tắt thiết bị': 'bật thiết bị',
-                           'đóng thiết bị': 'mở thiết bị'}
-neutral_intent = ['bật thiết bị', 'tắt thiết bị', 'mở thiết bị', 'đóng thiết bị']
 
 list_prefix_verbs = possible_intent_command_mapping['kiểm tra tình trạng thiết bị']
 list_subject = ['em', 'anh', 'chị', 'tớ', 'tôi', 'tao', 'chúng tôi', 'ta', 'chúng ta', 'bọn tôi', 'bọn anh', 'bọn chị',
@@ -1013,24 +1005,112 @@ def create_postfix(intent, subject, type=1):
     return postfix.strip(), label.strip(), type
 
 
+
+opposite_intent_mapping = {'bật thiết bị': 'tắt thiết bị',
+                           'giảm mức độ của thiết bị': 'tăng mức độ của thiết bị',
+                           'giảm nhiệt độ của thiết bị': 'tăng nhiệt độ của thiết bị',
+                           'giảm âm lượng của thiết bị': 'tăng âm lượng của thiết bị',
+                           'giảm độ sáng của thiết bị': 'tăng độ sáng của thiết bị',
+                           'hủy hoạt cảnh': 'kích hoạt cảnh',
+                           'kiểm tra tình trạng thiết bị': None,
+                           'kích hoạt cảnh': 'hủy hoạt cảnh',
+                           'mở thiết bị': 'đóng thiết bị',
+                           'tăng mức độ của thiết bị': 'giảm mức độ của thiết bị',
+                           'tăng nhiệt độ của thiết bị': 'giảm nhiệt độ của thiết bị',
+                           'tăng âm lượng của thiết bị': 'giảm âm lượng của thiết bị',
+                           'tăng độ sáng của thiết bị': 'giảm độ sáng của thiết bị',
+                           'tắt thiết bị': 'bật thiết bị',
+                           'đóng thiết bị': 'mở thiết bị'}
+neutral_intent = ['bật thiết bị', 'tắt thiết bị', 'mở thiết bị', 'đóng thiết bị']
+time_repeat_freq = [
+    "mỗi ngày",
+    "từng ngày",
+    "hàng ngày",
+    "hằng ngày",
+    "ngày mai",
+    "ngày kia",
+    # "hôm qua",
+    # "hôm kia",
+    # "hôm nọ"
+]
+reversed_intent_mapping = {
+    'bật thiết bị': 'tắt thiết bị',
+    'tắt thiết bị': 'bật thiết bị',
+    'giảm mức độ của thiết bị': 'tăng mức độ của thiết bị',
+    'tăng mức độ của thiết bị': 'giảm mức độ của thiết bị',
+    'giảm nhiệt độ của thiết bị': 'tăng nhiệt độ của thiết bị',
+    'tăng nhiệt độ của thiết bị': 'giảm nhiệt độ của thiết bị',
+    'giảm âm lượng của thiết bị': 'tăng âm lượng của thiết bị',
+    'tăng âm lượng của thiết bị': 'giảm âm lượng của thiết bị',
+    'giảm độ sáng của thiết bị': 'tăng độ sáng của thiết bị',
+    'tăng độ sáng của thiết bị': 'giảm độ sáng của thiết bị',
+    'hủy hoạt cảnh': 'kích hoạt cảnh',
+    'kích hoạt cảnh': 'hủy hoạt cảnh',
+    'mở thiết bị': 'đóng thiết bị',
+    'đóng thiết bị': 'mở thiết bị'
+}
+
+reversed_command_prefix = [
+    "đừng",
+    "không được",
+    "đừng có",
+    "đừng có mà",
+    "làm ơn đừng",
+    "chớ",
+    "nghiêm cấm",
+    "cấm"
+]
+device_keyword_command_mapping_dong_thiet_bi = {
+    'cửa': ['xếp', 'gấp', 'khép', 'sập', 'kéo'],
+    'rèm': ['xếp', 'gấp', 'khép', 'kéo'],
+    'vòi': ['vặn'],
+    'màn': ['xếp', 'gấp', 'kéo']
+}
+device_keyword_command_mapping_mo_thiet_bi = {
+    'cửa': ['kéo'],
+    'rèm': ['kéo'],
+    'màn': ['kéo']
+
+}
+device_keyword_command_mapping_bat_thiet_bi = {
+    'radio': ['phát'],
+    'CD': ['phát'],
+    'DVD': ['phát'],
+    'nhạc': ['phát'],
+    'lò': ['quay'],
+
+}
+
+human_names = [
+    "Ái", "An", "Bắc", "Bạc", "Băng", "Bảo", "Bích", "Binh", "Cẩn", "Cát",
+    "Chân", "Châu", "Chi", "Chiến", "Chinh", "Cung", "Cường", "Đài", "Đăng",
+    "Đào", "Đất", "Đe", "Di", "Diễm", "Diệp", "Dĩnh", "Đoan", "Đức", "Dung",
+    "Dương", "Duy", "Duyên", "Giang", "Hà", "Hạ", "Hải", "Hân", "Hằng", "Hạnh",
+    "Hiền", "Hiếu", "Hoàng", "Huân", "Hùng", "Hương", "Hưng", "Huy", "Huyền",
+    "Huỳnh", "Khắc", "Khánh", "Khiêm", "Khoa", "Khuê", "Kiệt", "Kỳ", "Lá",
+    "Lam", "Lâm", "Lan", "Lễ", "Lệ", "Liên", "Linh", "Lộc", "Long", "Lực",
+    "Lý", "Mai", "Mẫn", "Mạnh", "Mậu", "Miên", "Minh", "My", "Nam", "Nga",
+    "Ngà", "Ngân", "Ngiêm", "Ngọc", "Nguyệt", "Nháng", "Nhất", "Nhi", "Nhiên",
+    "Như", "Nhung", "Oanh", "Phú", "Phụng", "Phương", "Phượng", "Quảng", "Quế",
+    "Quý", "Quyên", "Quyền", "Quỳnh", "Sâm", "Sĩ", "Sơn", "Tài", "Tâm", "Tân",
+    "Thạch", "Thăng", "Thắng", "Thanh", "Thảo", "Thiên", "Thịnh", "Thọ", "Thư",
+    "Thục", "Thúy", "Thủy", "Thy", "Tiên", "Tiến", "Toàn", "Tới", "Trác", "Tràm",
+    "Trí", "Trinh", "Trúc", "Trung", "Trường", "Tú", "Tuân", "Tuệ", "Tùng",
+    "Tường", "Uyên", "Vân", "Văn", "Vi", "Viễn", "Vinh", "Vĩnh", "Vũ", "Vương",
+    "Vy", "Xanh", "Xương", "Ý", "Yến"
+]
+
 directions = ['bên trên', 'bên trái', 'bên trên', 'bên dưới', 'phía đông', 'phía tây', 'phía nam', 'phía bắc',
               'hướng đông', 'hướng tây', 'hướng nam', 'hướng bắc',
               'bên tay trái', 'bên tay phải'
               ]
-
-
-def generate_sentence():
-    template = "{} {} {} {}"
-    first_slot = random.choice(subject_list)
-    second_slot = random.choice(support_words)
-    third_slot = random.choice(scenes)
-    fourth_slot = random.choice(end_words)
-    return template.format(first_slot, second_slot, third_slot, fourth_slot)
-
-
-intent_rate_mapping = {
-
-}
 if __name__ == "__main__":
-    for i in range(10):
-        print(generate_sentence().strip())
+    for i in range(20):
+        prefix, type, subject, annotation = create_prefix(include_postfix=False)
+        # print(prefix + " " + create_middle('bật thiết bị', include_postfix=True) + ' ' + create_postfix(
+        #     'đóng thiết bị',
+        # #     subject, type), type)
+        # middle, label = create_middle('bật thiết bị', include_postfix=True)
+        # post, label_post, type = create_postfix('tắt thiết bị', subject=subject, type=type)
+        # print(prefix + " " + middle + " " + post, annotation + " " + label + " " + label_post, type)
+        print(prefix, annotation)
